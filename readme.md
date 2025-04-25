@@ -1,14 +1,14 @@
 ## 0. Download data
 
-* Check which embeddings models are multilingual, and which languages are best suited for those models
-* Steam API for sentiment analysis (multiple languages, according to prior bullet)
+* Check which [embeddings models](https://sbert.net/docs/sentence_transformer/pretrained_models.html) are multilingual, and which languages are best suited for those models
+* [Steam API](https://partner.steamgames.com/doc/store/getreviews) for sentiment analysis (multiple languages, according to prior bullet)
 * Look for sentiment datasets for additional testing (multiple languages, according to first bullet)
 
 ## 1. Basic Sentiment Classifier
 
 * Logistic Regression
 * Other Classifier models seen in class
-* Based on Polarity scoring (check python libraries like VADER)
+* Based on Polarity scoring (check python libraries like [VADER](https://melaniewalsh.github.io/Intro-Cultural-Analytics/05-Text-Analysis/04-Sentiment-Analysis.html))
 
 ### 1.1 Benchmarks
 
