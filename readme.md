@@ -10,7 +10,8 @@ List of games to scrape. Please get 500 reviews per game. For now, only English.
 We are missing the scrape code. Whoever creates the code, please make sure to use this type of URL format:
 https://store.steampowered.com/appreviews/1128000?json=1&filter=all&language=english&day_range=365
 
-We need something to identify each individual review (probably "recommendationid"), and then get the language, review, and sentiment ("voted_up").
+We need something to identify each individual review (probably "recommendationid"), and then get the language, review, and sentiment ("voted_up"). 
+**NOTE: a parameter called "cursor" must be passed in the URL to get additional reviews.** Check API documentation for details.
 
 After that, check if you have an even split if your game has a mixed rating, mostly 1s if positive, and mostly 0s if negative.
 
