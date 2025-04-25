@@ -12,13 +12,13 @@ List of games to scrape. Please get 500 reviews per game. For now, only English.
 | NBA 2K20 (1089350)                     | 50%          | Mixed                | Sports               | Vasco
 | Kerbal Space Program 2 (954850)      | 30%          | Negative             | Simulation           | Vasco
 | Monster Hunter Wilds (2246340)      | 59%          | Mixed                | Action, Multi Player | Vasco
-| Overwatch 2 (2357570)                 | 24%          | Extremely Negative   | FPS, Hero Shooter    | Vasco
+| **Overwatch 2 (2357570)**                 | 24%          | Extremely Negative   | FPS, Hero Shooter    | Vasco
 | Terraria (105600)                    | 97%          | Extremely Positive   | Sandbox, Survival    | Sindhuj
 | Portal 2 (620)                     | 98%          | Extremely Positive   | Puzzle, Adventure    | Sindhuj
-| VRChat (438100)                      | 74%          | Positive             | Social VR            | Sindhuj
+| **VRChat (438100)  **                    | 74%          | Positive             | Social VR            | Sindhuj
 | Star Wars: Battlefront Classic Collection (2446550)| 23% | Extremely Negative| Space FPS            | Sindhuj
 | Mafia III: Definitive Edition (360430)| 57%          | Mixed                | Action, Open World   | Maria
-| Feed the Cups (2336220)                | 30%          | Negative             | Cooking Simulator    | Maria
+|** Feed the Cups (2336220)**                | 30%          | Negative             | Cooking Simulator    | Maria
 | Wolcen: Lords of Mayhem (424370)      | 55%          | Mixed                | Action, RPG          | Maria
 | Cities: Skylines II (949230)         | 52%          | Mixed                | City Builder         | Maria
 | Tekken 8 (1778820)                    | 54%          | Mixed                | Fighting             | Nilay 
