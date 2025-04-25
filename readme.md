@@ -3,9 +3,11 @@
 * Check which [embeddings models](https://sbert.net/docs/sentence_transformer/pretrained_models.html) are multilingual, and which languages are best suited for those models
 * [Steam API](https://partner.steamgames.com/doc/store/getreviews) for sentiment analysis (multiple languages, according to prior bullet)
   * List of games with total number of reviews [here](https://steamdb.info/stats/gameratings/?sort=reviews_desc)
-* Look for sentiment datasets for additional testing (multiple languages, according to first bullet)
+* Look for sentiment datasets for additional testing (multiple languages, according to the first bullet)
 
-| Game Name                    | Review Score | Review Rating        | Category             | Scraper     |
+List of games to scrape. Please get 500 reviews per game. For now, only English. **Pending multilingual embedding for other languages.**
+
+| Game Name (App Id)                   | Review Score | Review Rating        | Category             | Scraper     |
 |------------------------------|--------------|----------------------|----------------------| ----------- |
 | NBA 2K20 (1089350)                     | 50%          | Mixed                | Sports               | Vasco
 | Kerbal Space Program 2 (954850)      | 30%          | Negative             | Simulation           | Vasco
