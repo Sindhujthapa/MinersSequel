@@ -31,9 +31,9 @@
 
 * Same as 1.1
 * Check what happens if: 
-1. Use English embedding with English data, 
-2. multilingual embedding with Spanish (other language) data, 
-3. multilingual with English
+  1. Use English embedding with English data, 
+  2. multilingual embedding with Spanish (other language) data, 
+  3. multilingual with English
 
 ## Comparisons between 1 and 2
 
