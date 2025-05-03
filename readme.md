@@ -15,24 +15,27 @@ We need something to identify each individual review (probably "recommendationid
 
 After that, check if you have an even split if your game has a mixed rating, mostly 1s if positive, and mostly 0s if negative.
 
-| Game Name (App Id)                   | Review Score | Review Rating        | Category             | Scraper     |
-|------------------------------|--------------|----------------------|----------------------| ----------- |
-| NBA 2K20 (1089350)                     | 50%          | Mixed                | Sports               | Vasco
-| Kerbal Space Program 2 (954850)      | 30%          | Negative             | Simulation           | Vasco
-| Monster Hunter Wilds (2246340)      | 59%          | Mixed                | Action, Multi Player | Vasco
-| Cube World (1128000) (Filter negative only)                 | 37%          | Mostly Negative   | Open World   | Vasco
-| Terraria (105600)                    | 97%          | Extremely Positive   | Sandbox, Survival    | Sindhuj
-| Portal 2 (620)                     | 98%          | Extremely Positive   | Puzzle, Adventure    | Sindhuj
-| The Crew 2 (646910)                    | 74%          | Positive             | Driving            | Sindhuj
-| Star Wars: Battlefront Classic Collection (2446550)| 23% | Extremely Negative| Space FPS            | Sindhuj
-| Mafia III: Definitive Edition (360430)| 57%          | Mixed                | Action, Open World   | Maria
-| Resident Evil Resistance (952070)                | 38%          | Negative             | Horror, Multiplayer    | Maria
-| Wolcen: Lords of Mayhem (424370)      | 55%          | Mixed                | Action, RPG          | Maria
-| Cities: Skylines II (949230)         | 52%          | Mixed                | City Builder         | Maria
-| Tekken 8 (1778820)                    | 54%          | Mixed                | Fighting             | Nilay 
-| EA SPORTS™ FIFA 23 (1811260)          | 57%          | Mixed                | Sports               | Nilay
-| Call of Duty® (1938090)      | 59%          | Mixed                | FPS, Multiplayer     | Nilay
-| Fall Guys (1097150)      | 81%          | Positive                | Battle Royale, Multiplayer     | Nilay
+| Game Name (App Id)                   | Review Score | Review Rating        | Category             | 
+|------------------------------|--------------|----------------------|----------------------| 
+| Schedule I (3164500)                     | 97%          | Extremely Positive                | Crime               |
+| Balatro (2379780)      | 96%          | Extremely Positive             | Cards/Poker           | 
+| WEBFISHING (3146520)      | 96%          | Extremely Positive             | Fishing, Multi Player | 
+| NBA 2K20 (1089350)                     | 50%          | Mixed                | Sports               |
+| Kerbal Space Program 2 (954850)      | 30%          | Negative             | Simulation           | 
+| Monster Hunter Wilds (2246340)      | 59%          | Mixed                | Action, Multi Player | 
+| Cube World (1128000)                | 37%          | Mostly Negative   | Open World   | 
+| Terraria (105600)                    | 97%          | Extremely Positive   | Sandbox, Survival    | 
+| Portal 2 (620)                     | 98%          | Extremely Positive   | Puzzle, Adventure    | 
+| The Crew 2 (646910)                    | 74%          | Positive             | Driving            |
+| Star Wars: Battlefront Classic Collection (2446550)| 23% | Extremely Negative| Space FPS            |
+| Mafia III: Definitive Edition (360430)| 57%          | Mixed                | Action, Open World   | 
+| Resident Evil Resistance (952070)                | 38%          | Negative             | Horror, Multiplayer    | 
+| Wolcen: Lords of Mayhem (424370)      | 55%          | Mixed                | Action, RPG          | 
+| Cities: Skylines II (949230)         | 52%          | Mixed                | City Builder         | 
+| Tekken 8 (1778820)                    | 54%          | Mixed                | Fighting             | 
+| EA SPORTS™ FIFA 23 (1811260)          | 57%          | Mixed                | Sports               | 
+| Call of Duty® (1938090)      | 59%          | Mixed                | FPS, Multiplayer     | 
+| Fall Guys (1097150)      | 81%          | Positive                | Battle Royale, Multiplayer     | 
 
 
 ## 1. Basic Sentiment Classifier
