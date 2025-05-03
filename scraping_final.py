@@ -168,7 +168,8 @@ def main():
     # Clean csv file
     df = pd.read_csv("steam_reviews_unique.csv")
     df["review"] = df["review"].astype("string").str.replace(r"\s+", " ", regex=True).str.strip().str.replace("\u00A0", " ", regex = False)
-    df.to_csv("steam_reviews_unique.csv", index=False, encoding="utf-8-sig")
+    df_unique = df.drop_duplicates(subset = "review")
+    df_unique.to_csv("steam_reviews_unique.csv", index=False, encoding="utf-8-sig")
     
 if __name__ == "__main__":
     main()
