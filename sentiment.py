@@ -8,6 +8,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split, learning_curve
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import (
     roc_auc_score, roc_curve, confusion_matrix, classification_report
 )
@@ -37,7 +40,7 @@ y = df['voted_up']
 # 5. Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 6. Decision Tree Classifier
+# 6. Decision Tree
 dt = DecisionTreeClassifier(random_state=42)
 dt.fit(X_train, y_train)
 y_dt_prob = dt.predict_proba(X_test)[:, 1]
@@ -46,7 +49,7 @@ auc_dt = roc_auc_score(y_test, y_dt_prob)
 fpr_dt, tpr_dt, _ = roc_curve(y_test, y_dt_prob)
 print(f"AUC (Decision Tree): {auc_dt:.3f}")
 
-# 7. SVC Classifier
+# 7. SVC
 svc = SVC(probability=True, random_state=42)
 svc.fit(X_train, y_train)
 y_svc_prob = svc.predict_proba(X_test)[:, 1]
@@ -55,83 +58,70 @@ auc_svc = roc_auc_score(y_test, y_svc_prob)
 fpr_svc, tpr_svc, _ = roc_curve(y_test, y_svc_prob)
 print(f"AUC (SVC): {auc_svc:.3f}")
 
-# 8. Combined ROC Plot
-plt.figure(figsize=(7, 6))
+# 8. Logistic Regression
+lr = LogisticRegression(max_iter=1000, random_state=42)
+lr.fit(X_train, y_train)
+y_lr_prob = lr.predict_proba(X_test)[:, 1]
+y_lr_pred = lr.predict(X_test)
+auc_lr = roc_auc_score(y_test, y_lr_prob)
+fpr_lr, tpr_lr, _ = roc_curve(y_test, y_lr_prob)
+print(f"AUC (Logistic Regression): {auc_lr:.3f}")
+
+# 9. Random Forest
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+y_rf_prob = rf.predict_proba(X_test)[:, 1]
+y_rf_pred = rf.predict(X_test)
+auc_rf = roc_auc_score(y_test, y_rf_prob)
+fpr_rf, tpr_rf, _ = roc_curve(y_test, y_rf_prob)
+print(f"AUC (Random Forest): {auc_rf:.3f}")
+
+# 10. Naive Bayes
+nb = MultinomialNB()
+nb.fit(X_train, y_train)
+y_nb_prob = nb.predict_proba(X_test)[:, 1]
+y_nb_pred = nb.predict(X_test)
+auc_nb = roc_auc_score(y_test, y_nb_prob)
+fpr_nb, tpr_nb, _ = roc_curve(y_test, y_nb_prob)
+print(f"AUC (Naive Bayes): {auc_nb:.3f}")
+
+# 11. Combined ROC Plot
+plt.figure(figsize=(10, 7))
 plt.plot(fpr_vader, tpr_vader, label=f'VADER (AUC = {auc_vader:.2f})')
 plt.plot(fpr_dt, tpr_dt, label=f'Decision Tree (AUC = {auc_dt:.2f})')
 plt.plot(fpr_svc, tpr_svc, label=f'SVC (AUC = {auc_svc:.2f})')
-plt.plot([0, 1], [0, 1], 'k--', linewidth=0.8)
+plt.plot(fpr_lr, tpr_lr, label=f'Logistic Regression (AUC = {auc_lr:.2f})')
+plt.plot(fpr_rf, tpr_rf, label=f'Random Forest (AUC = {auc_rf:.2f})')
+plt.plot(fpr_nb, tpr_nb, label=f'Naive Bayes (AUC = {auc_nb:.2f})')
+plt.plot([0, 1], [0, 1], 'k--')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Combined ROC Curve: VADER vs. Decision Tree vs. SVC')
-plt.legend(loc='lower right')
+plt.title('ROC Curve Comparison')
+plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# 9. Confusion Matrices
+# 12. Learning Curves
+models = {
+    'Decision Tree': dt,
+    'SVC': svc,
+    'Logistic Regression': lr,
+    'Random Forest': rf,
+    'Naive Bayes': nb
+}
 
-# VADER
-cm_vader = confusion_matrix(y_true, df['vader_label'])
-plt.figure(figsize=(5, 4))
-sns.heatmap(cm_vader, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
-plt.xlabel('Predicted')
-plt.ylabel('Actual')
-plt.title('Confusion Matrix - VADER')
-plt.tight_layout()
-plt.show()
+plt.figure(figsize=(10, 7))
+for name, model in models.items():
+    train_sizes, train_scores, test_scores = learning_curve(
+        model, X, y, cv=5, scoring='roc_auc', n_jobs=-1,
+        train_sizes=np.linspace(0.1, 1.0, 10)
+    )
+    plt.plot(train_sizes, test_scores.mean(axis=1), label=f'Validation AUC - {name}')
 
-print("Classification Report - VADER")
-print(classification_report(y_true, df['vader_label'], target_names=['Negative', 'Positive']))
-
-# Decision Tree
-cm_dt = confusion_matrix(y_test, y_dt_pred)
-plt.figure(figsize=(5, 4))
-sns.heatmap(cm_dt, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
-plt.xlabel('Predicted')
-plt.ylabel('Actual')
-plt.title('Confusion Matrix - Decision Tree')
-plt.tight_layout()
-plt.show()
-print("Classification Report - Decision Tree")
-print(classification_report(y_test, y_dt_pred, target_names=['Negative', 'Positive']))
-
-# SVC
-cm_svc = confusion_matrix(y_test, y_svc_pred)
-plt.figure(figsize=(5, 4))
-sns.heatmap(cm_svc, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
-plt.xlabel('Predicted')
-plt.ylabel('Actual')
-plt.title('Confusion Matrix - SVC')
-plt.tight_layout()
-plt.show()
-print("Classification Report - SVC")
-print(classification_report(y_test, y_svc_pred, target_names=['Negative', 'Positive']))
-
-# 10. Learning Curves
-# Decision Tree learning curve
-train_sizes_dt, train_scores_dt, test_scores_dt = learning_curve(
-    dt, X, y, cv=5, scoring='roc_auc', n_jobs=-1, train_sizes=np.linspace(0.1, 1.0, 10)
-)
-
-# SVC learning curve
-train_sizes_svc, train_scores_svc, test_scores_svc = learning_curve(
-    svc, X, y, cv=5, scoring='roc_auc', n_jobs=-1, train_sizes=np.linspace(0.1, 1.0, 10)
-)
-
-# Combined plot
-plt.figure(figsize=(7, 6))
-plt.plot(train_sizes_dt, train_scores_dt.mean(axis=1), label="Training AUC - DT")
-plt.plot(train_sizes_dt, test_scores_dt.mean(axis=1), label="Validation AUC - DT")
-plt.plot(train_sizes_svc, train_scores_svc.mean(axis=1), label="Training AUC - SVC")
-plt.plot(train_sizes_svc, test_scores_svc.mean(axis=1), label="Validation AUC - SVC")
-
-plt.xlabel("Training Examples")
-plt.ylabel("AUC")
-plt.title("Learning Curves - Decision Tree vs. SVC")
+plt.xlabel("Training Set Size")
+plt.ylabel("AUC Score")
+plt.title("Learning Curves for All Models")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
