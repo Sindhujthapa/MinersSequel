@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 
 # 1. Load dataset
-df = pd.read_csv('/Users/masha/Desktop/Data mining (texas)/MinersSequel/steam_reviews.csv')
+df = pd.read_csv('steam_reviews_unique.csv')
 print("Data loaded.")
 print(df.head())
 
@@ -41,7 +41,6 @@ y = df['voted_up']
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
-
 
 # 6. Decision Tree
 dt = DecisionTreeClassifier(random_state=42)
@@ -87,6 +86,30 @@ y_nb_pred = nb.predict(X_test)
 auc_nb = roc_auc_score(y_test, y_nb_prob)
 fpr_nb, tpr_nb, _ = roc_curve(y_test, y_nb_prob)
 print(f"AUC (Naive Bayes): {auc_nb:.3f}")
+
+# Confusion Matrices and Classification Reports
+models_pred = {
+    'VADER': (y_true, df['vader_label']),
+    'Decision Tree': (y_test, y_dt_pred),
+    'SVC': (y_test, y_svc_pred),
+    'Logistic Regression': (y_test, y_lr_pred),
+    'Random Forest': (y_test, y_rf_pred),
+    'Naive Bayes': (y_test, y_nb_pred)
+}
+
+for name, (y_true_m, y_pred_m) in models_pred.items():
+    cm = confusion_matrix(y_true_m, y_pred_m)
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title(f'Confusion Matrix - {name}')
+    plt.tight_layout()
+    plt.show()
+
+    print(f"Classification Report - {name}")
+    print(classification_report(y_true_m, y_pred_m, target_names=['Negative', 'Positive']))
 
 # 11. Combined ROC Plot
 plt.figure(figsize=(10, 7))
