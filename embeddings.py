@@ -74,3 +74,19 @@ evaluate_model_with_roc(emb_en_multi, y_en, "MiniLM-Multilingual (EN)", roc_data
 print("\nEncoding Spanish reviews with Multilingual model...")
 emb_es = models["MiniLM-Multilingual (ES)"].encode(X_es, show_progress_bar=True)
 evaluate_model_with_roc(emb_es, y_es, "MiniLM-Multilingual (ES)", roc_data)
+
+# --- Combined ROC Curve Plot ---
+plt.figure(figsize=(10, 7))
+for name, (fpr, tpr, auc) in roc_data.items():
+    plt.plot(fpr, tpr, label=f"{name} (AUC = {auc:.2f})")
+
+plt.plot([0, 1], [0, 1], "k--", label="Random Classifier")
+plt.title("ROC Curves for SentenceTransformer Models")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.legend()
+plt.grid()
+plt.tight_layout()
+plt.show()
+
+
