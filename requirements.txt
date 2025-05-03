@@ -3,3 +3,4 @@ sklearn
 matplotlib
 numpy
 seaborn
+vaderSentiment
