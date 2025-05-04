@@ -94,14 +94,23 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# 9. Learning Curves (on training set only)
+# 9. Learning Curves (training vs validation per model, one color per model)
 plt.figure(figsize=(10, 7))
-for name, model in models.items():
+colors = plt.colormaps.get_cmap('tab10')
+
+for idx, (name, model) in enumerate(models.items()):
     train_sizes, train_scores, test_scores = learning_curve(
         model, X_train, y_train, cv=5, scoring='roc_auc', n_jobs=-1,
         train_sizes=np.linspace(0.1, 1.0, 10)
     )
-    plt.plot(train_sizes, test_scores.mean(axis=1), label=f'Validation AUC - {name}')
+    train_mean = train_scores.mean(axis=1)
+    test_mean = test_scores.mean(axis=1)
+
+    color = colors(idx)
+    plt.plot(train_sizes, train_mean, label=f'Train AUC - {name}', linestyle='-',
+             color=color)
+    plt.plot(train_sizes, test_mean, label=f'Validation AUC - {name}', linestyle='--',
+             color=color)
 
 plt.xlabel("Training Set Size")
 plt.ylabel("AUC Score")
@@ -110,3 +119,5 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+
