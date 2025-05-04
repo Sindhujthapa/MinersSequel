@@ -49,7 +49,7 @@ df_en = pd.read_csv("steam_reviews_unique.csv", encoding="utf-8-sig")
 X_en = df_en["review"].astype(str).tolist()
 y_en = df_en["voted_up"].astype(int)
 
-df_es = pd.read_csv("steam_reviews_unique_esp.csv", encoding="utf-8-sig")
+df_es = pd.read_csv("steam_reviews_balanced_esp.csv", encoding="utf-8-sig")
 X_es = df_es["review"].astype(str).tolist()
 y_es = df_es["voted_up"].astype(int)
 
