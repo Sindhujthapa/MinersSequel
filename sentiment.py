@@ -28,13 +28,12 @@ def compute_vader_sentiment(df):
     df['vader_score'] = df['review'].astype(str).apply(lambda x: analyzer.polarity_scores(x)['compound'])
     return df
 
-# Choose best threshold based on F1 score
-def determine_best_threshold(df, y_col='voted_up', score_col='vader_score'):
+# Choose best threshold based on F1 score (TRAIN ONLY)
+def determine_best_threshold(df_train, y_col='voted_up', score_col='vader_score'):
     thresholds = np.linspace(-1, 1, 100)
-    y_true = df[y_col]
-    best_thresh = max(thresholds, key=lambda t: f1_score(y_true, (df[score_col] >= t).astype(int)))
-    df['vader_label'] = (df[score_col] >= best_thresh).astype(int)
-    return df, best_thresh
+    y_true = df_train[y_col]
+    best_thresh = max(thresholds, key=lambda t: f1_score(y_true, (df_train[score_col] >= t).astype(int)))
+    return best_thresh
 
 # TF-IDF vectorization
 def vectorize_text(df, text_col='review'):
@@ -43,17 +42,16 @@ def vectorize_text(df, text_col='review'):
     return X, vectorizer
 
 # Train-test split
-def split_data(X, y):
-    return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+def split_data(df):
+    return train_test_split(df, test_size=0.2, random_state=42, stratify=df['voted_up'])
 
 # Evaluate VADER scores
-def evaluate_vader(df, y_test_index, best_thresh):
-    vader_test = df.iloc[y_test_index]
-    y_true = vader_test['voted_up']
-    y_pred = (vader_test['vader_score'] >= best_thresh).astype(int)
-    auc = roc_auc_score(y_true, vader_test['vader_score'])
-    fpr, tpr, _ = roc_curve(y_true, vader_test['vader_score'])
-    return y_true, y_pred, vader_test['vader_score'], fpr, tpr, auc
+def evaluate_vader(df_test, best_thresh):
+    y_true = df_test['voted_up']
+    y_pred = (df_test['vader_score'] >= best_thresh).astype(int)
+    auc = roc_auc_score(y_true, df_test['vader_score'])
+    fpr, tpr, _ = roc_curve(y_true, df_test['vader_score'])
+    return y_true, y_pred, df_test['vader_score'], fpr, tpr, auc
 
 # Train models
 def train_and_evaluate_models(X_train, X_test, y_train, y_test):
@@ -136,24 +134,32 @@ if __name__ == '__main__':
 
     # Step 2: VADER Sentiment
     df = compute_vader_sentiment(df)
-    df, best_thresh = determine_best_threshold(df)
-    
-    # Step 3: Text Vectorization
-    X, vectorizer = vectorize_text(df)
-    y = df['voted_up']
-    
-    # Step 4: Train-Test Split
-    X_train, X_test, y_train, y_test = split_data(X, y)
-    
-    # Step 5: VADER Evaluation
-    y_vader_true, y_vader_pred, vader_scores, fpr_vader, tpr_vader, auc_vader = evaluate_vader(df, y_test.index, best_thresh)
+
+    # Step 3: Train-Test Split
+    df_train, df_test = split_data(df)
+
+    # Step 4: Determine best threshold only from training data
+    best_thresh = determine_best_threshold(df_train)
+
+    # Step 5: Apply threshold to create vader_label for both
+    df_train['vader_label'] = (df_train['vader_score'] >= best_thresh).astype(int)
+    df_test['vader_label'] = (df_test['vader_score'] >= best_thresh).astype(int)
+
+    # Step 6: Text Vectorization
+    X_train, vectorizer = vectorize_text(df_train)
+    X_test = vectorizer.transform(df_test['review'].astype(str))
+    y_train = df_train['voted_up']
+    y_test = df_test['voted_up']
+
+    # Step 7: VADER Evaluation
+    y_vader_true, y_vader_pred, vader_scores, fpr_vader, tpr_vader, auc_vader = evaluate_vader(df_test, best_thresh)
     model_outputs = {'VADER': (y_vader_true, y_vader_pred, vader_scores, fpr_vader, tpr_vader, auc_vader)}
-    
-    # Step 6: Model Training
+
+    # Step 8: Model Training
     models, outputs = train_and_evaluate_models(X_train, X_test, y_train, y_test)
     model_outputs.update(outputs)
-    
-    # Step 7: Visualizations
+
+    # Step 9: Visualizations
     plot_confusion_matrices(model_outputs)
     plot_roc_curves(model_outputs)
     plot_learning_curves(models, X_train, y_train)
