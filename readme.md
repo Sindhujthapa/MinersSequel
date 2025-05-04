@@ -70,20 +70,27 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 * Based on Polarity scoring (check python libraries like [VADER](https://melaniewalsh.github.io/Intro-Cultural-Analytics/05-Text-Analysis/04-Sentiment-Analysis.html))
 
 ### 1.1 Benchmarks
-
-* AUC, the other curve seen in class
-* Learning curve (rate of learning depending on how many data we feed the model)
+* AUC
+* Average Precision
+* ROC curve
+* Learning curve (rate of learning depending on how much data we feed the model)
 
 ## 2. Embedding 
 
-### Methodology
+### 2.1 Benchmarks
+* AUC
+* Average Precision
+* ROC curve
+* Learning curve (rate of learning depending on how much data we feed the model)
+
+### 2.2 Methodology
 To expand our analysis from the earlier models, we tried to use the data to create embeddings based on Sentence Bidirectional Encoder Representations from Transformers (SBERT). We chose these embedding models as they consider each word within the context of its position in a sentence. We use the following versions of the model:
 1. all-MiniLM-L6-v2: This is a relatively fast model that can be used as a baseline for embedding text in the English language.
 2. paraphrase-Multilingual-MiniLM-L12-v2: This is a longer, multilingual model used in this context for English and Spanish.
 
 After embedding, we made predictions using Logistic Regression, as this was the best/most consistent classifier for our dataset. To optimize the classifier, we fine-tuned the parameters C (inverse of regularization strength), the penalty size, and the solver type. We finally consider the area under the curve (AUC) as 'scoring' when finding our best model using GridsearchCV.
 
-### Main Findings
+### 2.3 Main Findings
 After running both types of models, we noticed the following performance across the benchmarks:
 
 | Metric             | MiniLM-English                                | MiniLM-Multilingual (EN)                    | MiniLM-Multilingual (ES)                    |
@@ -94,8 +101,8 @@ After running both types of models, we noticed the following performance across 
 
 The next plot shows the ROC curve:
 
-### Robustness checks
-#### 1. Performance across other data (movie reviews)
+### 2.4 Robustness checks
+#### i. Performance across other data (movie reviews)
 We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
 | Evaluation Setting                      | AUC    | Average Precision | Best Logistic Regression Params                     |
 |----------------------------------------|--------|-------------------|-----------------------------------------------------|
@@ -104,14 +111,15 @@ We downloaded a dataset from Hugging Face that lists movie reviews with sentimen
 | Train: ES (Steam)<br>Test: EN (Steam)  | 0.8743 | 0.8702            | {'C': 1, 'penalty': 'l2', 'solver': 'liblinear'}    |
 
 
-#### 2. Performance across training set size.
+#### ii. Performance across training set size.
 To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations. 
 Here's how our benchmarks changed with increasing training set size:
 
 
 
-#### 3. Performance across sample sizes.
+#### iii. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
+
 
 ### 2.2 Benchmarks
 
