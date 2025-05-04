@@ -1,0 +1,144 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split, learning_curve
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import (
+    roc_auc_score, roc_curve, confusion_matrix, classification_report, f1_score
+)
+
+def load_data(path):
+    """Load and preview dataset."""
+    df = pd.read_csv(path)
+    print("Data loaded.")
+    return df
+
+
+def compute_vader_scores(df):
+    """Apply VADER sentiment scoring and determine best threshold based on F1."""
+    analyzer = SentimentIntensityAnalyzer()
+    df['vader_score'] = df['review'].apply(lambda x: analyzer.polarity_scores(str(x))['compound'])
+    thresholds = np.linspace(-1, 1, 100)
+    y_true = df['voted_up']
+    best_thresh = max(thresholds, key=lambda t: f1_score(y_true, (df['vader_score'] >= t).astype(int)))
+    df['vader_label'] = (df['vader_score'] >= best_thresh).astype(int)
+    return df, best_thresh
+
+def prepare_features(df):
+    """Transform reviews into TF-IDF features."""
+    vectorizer = TfidfVectorizer(max_features=1000)
+    X = vectorizer.fit_transform(df['review'].astype(str))
+    y = df['voted_up']
+    return X, y
+
+def evaluate_vader(df, best_thresh, y_test):
+    """Evaluate VADER on the test set using best threshold."""
+    vader_test = df.iloc[y_test.index]
+    y_pred = (vader_test['vader_score'] >= best_thresh).astype(int)
+    y_score = vader_test['vader_score']
+    auc = roc_auc_score(y_test, y_score)
+    fpr, tpr, _ = roc_curve(y_test, y_score)
+    return y_test, y_pred, y_score, fpr, tpr, auc
+
+def train_and_evaluate_models(X_train, X_test, y_train, y_test):
+    """Train models and evaluate predictions, ROC, and AUC."""
+    models = {
+        'Decision Tree': DecisionTreeClassifier(random_state=42),
+        'SVC': SVC(probability=True, random_state=42),
+        'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),
+        'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
+        'Naive Bayes': MultinomialNB()
+    }
+    results = {}
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        y_prob = model.predict_proba(X_test)[:, 1]
+        y_pred = model.predict(X_test)
+        auc = roc_auc_score(y_test, y_prob)
+        fpr, tpr, _ = roc_curve(y_test, y_prob)
+        results[name] = (y_test, y_pred, y_prob, fpr, tpr, auc, model)
+    return results
+
+def plot_confusion_matrices(results):
+    """Plot confusion matrices and print classification reports."""
+    for name, (y_true, y_pred, *_ ) in results.items():
+        cm = confusion_matrix(y_true, y_pred)
+        plt.figure(figsize=(5, 4))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+        plt.xlabel('Predicted')
+        plt.ylabel('Actual')
+        plt.title(f'Confusion Matrix - {name}')
+        plt.tight_layout()
+        plt.show()
+
+        print(f"Classification Report - {name}")
+        print(classification_report(y_true, y_pred, target_names=['Negative', 'Positive']))
+
+def plot_roc_curves(results):
+    """Plot ROC curves for all models."""
+    plt.figure(figsize=(10, 7))
+    for name, (_, _, _, fpr, tpr, auc, _) in results.items():
+        plt.plot(fpr, tpr, label=f'{name} (AUC = {auc:.2f})')
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve Comparison')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def plot_learning_curves(models, X_train, y_train):
+    """Plot training and validation learning curves for each model."""
+    plt.figure(figsize=(10, 7))
+    colors = plt.colormaps.get_cmap('tab10')
+    for idx, (name, (_, _, _, _, _, _, model)) in enumerate(models.items()):
+        train_sizes, train_scores, test_scores = learning_curve(
+            model, X_train, y_train, cv=5, scoring='roc_auc', n_jobs=-1,
+            train_sizes=np.linspace(0.1, 1.0, 10)
+        )
+        plt.plot(train_sizes, train_scores.mean(axis=1), label=f'Train AUC - {name}', linestyle='-', color=colors(idx))
+        plt.plot(train_sizes, test_scores.mean(axis=1), label=f'Validation AUC - {name}', linestyle='--', color=colors(idx))
+
+    plt.xlabel("Training Set Size")
+    plt.ylabel("AUC Score")
+    plt.title("Learning Curves for All Models")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def main():
+    df = load_data('steam_reviews_unique.csv')
+    df, best_thresh = compute_vader_scores(df)
+    X, y = prepare_features(df)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+    # VADER evaluation
+    vader_eval = evaluate_vader(df, best_thresh, y_test)
+    model_results = {'VADER': vader_eval}
+
+    # ML model evaluation
+    ml_results = train_and_evaluate_models(X_train, X_test, y_train, y_test)
+    model_results.update(ml_results)
+
+    plot_confusion_matrices(model_results)
+    plot_roc_curves(model_results)
+    plot_learning_curves(model_results, X_train, y_train)
+
+if __name__ == '__main__':
+    main()
+
+
+df = load_data('/Users/masha/Desktop/Data mining (texas)/MinersSequel/steam_reviews_unique.csv')
+
+
