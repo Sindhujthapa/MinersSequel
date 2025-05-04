@@ -84,14 +84,31 @@ To expand our analysis from the earlier models, we tried to use the data to crea
 After embedding, we made predictions using Logistic Regression, as this was the best/most consistent classifier for our dataset. To optimize the classifier, we fine-tuned the parameters C (inverse of regularization strength), the penalty size, and the solver type. We finally consider the area under the curve (AUC) as 'scoring' when finding our best model using GridsearchCV.
 
 ### Main Findings
+After running both types of models, we noticed the following performance across the benchmarks:
 
+| Metric             | MiniLM-English                                | MiniLM-Multilingual (EN)                    | MiniLM-Multilingual (ES)                    |
+|--------------------|-----------------------------------------------|---------------------------------------------|---------------------------------------------|
+| AUC                | 0.8861                                        | 0.8890                                      | 0.8712                                      |
+| Average Precision  | 0.8999                                        | 0.8997                                      | 0.8721                                      |
+| Best Parameters    | {'C': 1, 'penalty': 'l2', 'solver': 'liblinear'} | {'C': 0.1, 'penalty': 'l2', 'solver': 'liblinear'} | {'C': 0.1, 'penalty': 'l2', 'solver': 'liblinear'} |
+
+The next plot shows the ROC curve:
 
 ### Robustness checks
 #### 1. Performance across other data (movie reviews)
-We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. The
+We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
+| Evaluation Setting                      | AUC    | Average Precision | Best Logistic Regression Params                     |
+|----------------------------------------|--------|-------------------|-----------------------------------------------------|
+| Train: Steam<br>Test: IMDB             | 0.8168 | 0.8200            | {'C': 0.1, 'penalty': 'l2', 'solver': 'liblinear'}  |
+| Train: EN (Steam)<br>Test: ES (Steam)  | 0.8726 | 0.8701            | {'C': 0.1, 'penalty': 'l2', 'solver': 'lbfgs'}      |
+| Train: ES (Steam)<br>Test: EN (Steam)  | 0.8743 | 0.8702            | {'C': 1, 'penalty': 'l2', 'solver': 'liblinear'}    |
+
 
 #### 2. Performance across training set size.
-To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations.
+To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations. 
+Here's how our benchmarks changed with increasing training set size:
+
+
 
 #### 3. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
