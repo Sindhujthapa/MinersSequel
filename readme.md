@@ -10,7 +10,7 @@ Our project aims to:
 
 2. Compare traditional rule-based approaches (e.g., VADER) with modern embedding-based models (e.g., Sentence Transformers).
 
-3. Assess multilingual model performance, focusing on scalability to languages beyond English—starting with Spanish.
+3. Assess multilingual model performance, focusing on scalability to languages beyond English, starting with Spanish.
 
 4. Identify the most accurate and scalable approach for sentiment analysis across languages and platforms.
 
@@ -45,15 +45,23 @@ We used the [Steam API](https://partner.steamgames.com/doc/store/getreviews) to 
 
 Our combined dataset consisted of the following columns/features:
 * **Recommendation ID**: a unique identifier for each review.
-* **Language**: the language that the review was written in.
+* **Language**: the language in which the review was written.
 * **Voted up**: indicator for positive reviews.
 * **App ID**: the unique identifier for each game.
 * **Review**: the raw text of each review.
 
 ## Data Cleaning and Preprocessing
-Initually, when we attempted to scrape reviews we noticed that the API had some issues when calling for a new set of reviews. Multiple times, the API returned duplicate reviews. To address this problem, we exploited the fact that the API call could filter across different parameters like only positive or negative reviews, review recency, by ownership of the game, etc. Iterating over all the possible parameters combinations, we were able to collect at least 500 reviews for each game and compile a little more than 9000 unique reviews in English. We followed the some procedure for Spanish reviews, and compiled more than 7000 unique reviews. 
+Initially, when we attempted to scrape reviews, we noticed that the API had some issues when calling for a new set of reviews. Multiple times, the API returned duplicate reviews. To address this problem, we exploited the fact that the API call could filter across different parameters, like only positive or negative reviews, review recency, by ownership of the game, etc. Iterating over all the possible parameter combinations, we were able to collect at least 500 reviews for each game and compile a little more than 9000 unique reviews in English. We followed the same procedure for Spanish reviews and compiled more than 7000 unique reviews. 
 
-The final English dataset was perfectly balanced. However, the Spanish dataset was initiually umbalanced, so we had to created a balanced file, randomly sampling from the positive and negative reviews.
+The final English dataset was perfectly balanced. However, the Spanish dataset was initially unbalanced, so we had to create a balanced file by randomly sampling an equal number of positive and negative reviews.
+
+## Limitations
+* Some reviews do not consider correct sentence structure. For instance, a review could just contain emojis or single-word responses like trash, legendary, perfect, etc. So certain classifiers that consider context and the placement of words within a sentence could notice inaccuracies or be unusable altogether.
+* Certain terminology may be unique to specific games. As a result, several words may be associated with the value of that specific game rather than general sentiments.
+* Reviews with nuance in them may not be completely representative of the "upvote" indicator. For instance, when someone uses "I liked this game but...", it could contain information valuable to both positive and negative predictions.
+* Reviews can be used to increase a user's account level on Steam. Because of such instances, certain reviews are not genuine/are rushed.
+
+
 
 ## 1. Basic Sentiment Classifier
 
