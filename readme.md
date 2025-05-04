@@ -1,19 +1,25 @@
-## 0. Download data
+# Miners Sequel
+# Sentiment Analysis using Steam Reviews
+## Team Members: Nilay, Mariia, Vasco, Sindhuj
+## Problem Statement
+Steam hosts millions of user reviews in various languages, shaping both game visibility and perceived quality. However, the unstructured nature of this data presents challenges for systematically evaluating user sentiment.
 
-* Check which [embeddings models](https://sbert.net/docs/sentence_transformer/pretrained_models.html) are multilingual, and which languages are best suited for those models
-* [Steam API](https://partner.steamgames.com/doc/store/getreviews) for sentiment analysis (multiple languages, according to prior bullet)
-  * List of games with total number of reviews [here](https://steamdb.info/stats/gameratings/?sort=reviews_desc)
-* Look for sentiment datasets for additional testing (multiple languages, according to the first bullet)
+Our project aims to:
 
-List of games to scrape. Please get 500 reviews per game. For now, only English. **Pending multilingual embedding for other languages.**
+1. Build and evaluate sentiment classification models to determine whether a review expresses positive or negative sentiment.
 
-We are missing the scrape code. Whoever creates the code, please make sure to use this type of URL format:
-https://store.steampowered.com/appreviews/1128000?json=1&filter=all&language=english&day_range=365
+2. Compare traditional rule-based approaches (e.g., VADER) with modern embedding-based models (e.g., Sentence Transformers).
 
-We need something to identify each individual review (probably "recommendationid"), and then get the language, review, and sentiment ("voted_up"). 
-**NOTE: a parameter called "cursor" must be passed in the URL to get additional reviews.** Check API documentation for details.
+3. Assess multilingual model performance, focusing on scalability to languages beyond English—starting with Spanish.
 
-After that, check if you have an even split if your game has a mixed rating, mostly 1s if positive, and mostly 0s if negative.
+4. Identify the most accurate and scalable approach for sentiment analysis across languages and platforms.
+
+5. Optimize model parameters and dataset choices for each technique.
+
+6. Test model robustness by introducing non-gaming data to evaluate domain sensitivity of embedding-based models.
+
+## Data Sources 
+We used the [Steam API](https://partner.steamgames.com/doc/store/getreviews) to scrape game reviews directly from the gaming website. To manage the balance of upvotes and ensure that we have a sizeable amount of reviews, we choose our games specifically. Specifically, these games had, at least, more than 10,000 recent reviews. The following table shows the games considered.
 
 | Game Name (App Id)                   | Review Score | Review Rating        | Category             | 
 |------------------------------|--------------|----------------------|----------------------| 
@@ -37,6 +43,17 @@ After that, check if you have an even split if your game has a mixed rating, mos
 | Call of Duty® (1938090)      | 59%          | Mixed                | FPS, Multiplayer     | 
 | Fall Guys (1097150)      | 81%          | Positive                | Battle Royale, Multiplayer     | 
 
+Our combined dataset consisted of the following columns/features:
+* **Recommendation ID**: a unique identifier for each review.
+* **Language**: the language that the review was written in.
+* **Voted up**: indicator for positive reviews.
+* **App ID**: the unique identifier for each game.
+* **Review**: the raw text of each review.
+
+## Data Cleaning and Preprocessing
+Initually, when we attempted to scrape reviews we noticed that the API had some issues when calling for a new set of reviews. Multiple times, the API returned duplicate reviews. To address this problem, we exploited the fact that the API call could filter across different parameters like only positive or negative reviews, review recency, by ownership of the game, etc. Iterating over all the possible parameters combinations, we were able to collect at least 500 reviews for each game and compile a little more than 9000 unique reviews in English. We followed the some procedure for Spanish reviews, and compiled more than 7000 unique reviews. 
+
+The final English dataset was perfectly balanced. However, the Spanish dataset was initiually umbalanced, so we had to created a balanced file, randomly sampling from the positive and negative reviews.
 
 ## 1. Basic Sentiment Classifier
 
