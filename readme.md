@@ -76,14 +76,25 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 ## 2. Embedding 
 
-* Select some embedding models (english and multilingual)
-* Train models with data (check last lecture code for this type of implementation)
+### Methodology
+To expand our analysis from the earlier models, we tried to use the data to create embeddings based on Sentence Bidirectional Encoder Representations from Transformers (SBERT). We chose these embedding models as they consider each word within the context of its position in a sentence. We use the following versions of the model:
+1. all-MiniLM-L6-v2: This is a relatively fast model that can be used as a baseline for embedding text in the English language.
+2. paraphrase-Multilingual-MiniLM-L12-v2: This is a longer, multilingual model used in this context for English and Spanish.
 
-### 2.1 Observations relevant for Krueger
+After embedding, we made predictions using Logistic Regression, as this was the best/most consistent classifier for our dataset. To optimize the classifier, we fine-tuned the parameters C (inverse of regularization strength), the penalty size, and the solver type. We finally consider the area under the curve (AUC) as 'scoring' when finding our best model using GridsearchCV.
 
-* Does embedding capture sentiment? 
-* If it does, can we compare between them (the embedding models) using the usual metrics?
-* Can we train a embedding model with more than 1 language (spanish, french - check hierarchy of languages)
+### Main Findings
+
+
+### Robustness checks
+#### 1. Performance across other data (movie reviews)
+We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. The
+
+#### 2. Performance across training set size.
+To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations.
+
+#### 3. Performance across sample sizes.
+To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
 
 ### 2.2 Benchmarks
 
