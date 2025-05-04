@@ -89,4 +89,123 @@ plt.grid()
 plt.tight_layout()
 plt.show()
 
+# --- Non-Gaming Reviews Execution ---
+def balanced_subsample(df, target_size):
+    half = target_size // 2
+    df_pos = df[df["voted_up"] == 1]
+    df_neg = df[df["voted_up"] == 0]
+
+    df_pos_sampled = resample(df_pos, replace=False, n_samples=half, random_state=42)
+    df_neg_sampled = resample(df_neg, replace=False, n_samples=half, random_state=42)
+
+    return pd.concat([df_pos_sampled, df_neg_sampled]).sample(frac=1, random_state=42).reset_index(drop=True)
+
+
+dataset = load_dataset("imdb")
+imdb = dataset["test"].to_pandas()
+imdb = imdb.rename(columns={'label': 'voted_up', 'text': 'review'})
+
+n_en, n_imdb = len(df_en), len(imdb)
+target_size = min(n_en, n_imdb)
+
+if n_en > target_size:
+    df_en = balanced_subsample(df_en, target_size)
+else:
+    imdb = balanced_subsample(imdb, target_size)
+
+print(df_en["voted_up"].value_counts())
+print(imdb["voted_up"].value_counts())
+
+X_en = df_en["review"].tolist()
+y_en = df_en["voted_up"]
+X_imdb = imdb["review"].tolist()
+y_imdb = imdb["voted_up"]
+
+print("Encoding Steam and IMDB reviews...")
+model = SentenceTransformer("all-MiniLM-L6-v2")
+X_en_emb = model.encode(X_en, show_progress_bar=True)
+X_imdb_emb = model.encode(X_imdb, show_progress_bar=True)
+
+param_grid = {
+    'C': [0.01, 0.1, 1, 10, 100],
+    'penalty': ['l2'],
+    'solver': ['lbfgs', 'liblinear']
+}
+
+grid_search = GridSearchCV(
+    LogisticRegression(max_iter=1000),
+    param_grid,
+    cv=5,
+    scoring='roc_auc',
+    n_jobs=-1,
+    verbose=1
+)
+
+#Evaluate on IMDB embeddings
+print("Training Logistic Regression on Steam embeddings...")
+grid_search.fit(X_en_emb, y_en)
+best_model = grid_search.best_estimator_
+
+y_proba = best_model.predict_proba(X_imdb_emb)[:, 1]
+y_pred = best_model.predict(X_imdb_emb)
+
+auc = roc_auc_score(y_imdb, y_proba)
+ap = average_precision_score(y_imdb, y_proba)
+
+print("\n--- Evaluation (Train: Steam | Test: IMDB) ---")
+print(f"AUC: {auc:.4f}")
+print(f"Average Precision: {ap:.4f}")
+print("Best Logistic Regression Params:", grid_search.best_params_)
+
+# --- Bias Language Execution ---
+n_en, n_es = len(df_en), len(df_es)
+target_size = min(n_en, n_es)
+
+if n_en > target_size:
+    df_en = balanced_subsample(df_en, target_size)
+else:
+    df_es = balanced_subsample(df_es, target_size)
+
+X_en = df_en["review"].tolist()
+y_en = df_en["voted_up"]
+X_es = df_es["review"].tolist()
+y_es = df_es["voted_up"]
+
+print("Encoding reviews with multilingual model (bias estimation)...")
+model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+X_en_emb = model.encode(X_en, show_progress_bar=True)
+X_es_emb = model.encode(X_es, show_progress_bar=True)
+
+#Evaluate on Spanish embeddings
+print("Training Logistic Regression on English embeddings...")
+grid_search.fit(X_en_emb, y_en)
+best_model = grid_search.best_estimator_
+
+y_proba = best_model.predict_proba(X_es_emb)[:, 1]
+y_pred = best_model.predict(X_es_emb)
+
+auc = roc_auc_score(y_es, y_proba)
+ap = average_precision_score(y_es, y_proba)
+
+print("\n--- Cross-lingual Evaluation (Train: EN | Test: ES) ---")
+print(f"AUC: {auc:.4f}")
+print(f"Average Precision: {ap:.4f}")
+print("Best Logistic Regression Params:", grid_search.best_params_)
+
+
+#Evaluate on English embeddings
+print("Training Logistic Regression on Spanish embeddings...")
+grid_search.fit(X_es_emb, y_es)
+best_model = grid_search.best_estimator_
+
+y_proba = best_model.predict_proba(X_en_emb)[:, 1]
+y_pred = best_model.predict(X_en_emb)
+
+auc = roc_auc_score(y_en, y_proba)
+ap = average_precision_score(y_en, y_proba)
+
+print("\n--- Cross-lingual Evaluation (Train: ES | Test: EN) ---")
+print(f"AUC: {auc:.4f}")
+print(f"Average Precision: {ap:.4f}")
+print("Best Logistic Regression Params:", grid_search.best_params_)
 
