@@ -4,6 +4,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score, roc_curve, confusion_matrix, classification_report, ConfusionMatrixDisplay, average_precision_score
 import matplotlib.pyplot as plt
 from sentence_transformers import SentenceTransformer
+from sklearn.utils import resample
+from datasets import load_dataset
 import warnings
 warnings.filterwarnings("ignore")
 
