@@ -46,7 +46,7 @@ def plot_learning_curve(X, y, model_name, steps=10):
     plt.plot(sizes, aucs, label="AUC")
     plt.plot(sizes, aps, label="Average Precision")
     plt.plot(sizes, accs, label="Accuracy")
-    plt.xlabel("Training Set Size")
+    plt.xlabel("Number of samples")
     plt.ylabel("Score")
     plt.title(f"Learning Curve: {model_name}")
     plt.ylim(0, 1)
@@ -69,6 +69,12 @@ for filename, label in datasets:
     print(f"\nLoading dataset: {filename}")
     df = pd.read_csv(filename, encoding="utf-8-sig")
     X = df["review"].astype(str).tolist()
+    y = df["voted_up"].astype(int)
+
+    print(f"Encoding reviews using {label} model...")
+    X_emb = model.encode(X, show_progress_bar=True)
+
+    plot_learning_curve(X_emb, y, label)
     y = df["voted_up"].astype(int)
 
     print(f"Encoding reviews using {label} model...")
