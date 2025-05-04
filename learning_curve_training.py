@@ -3,33 +3,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score
+from sklearn.model_selection import train_test_split
 from sentence_transformers import SentenceTransformer
 import warnings
 warnings.filterwarnings("ignore")
 
 # --- Function to plot learning curve ---
-def plot_learning_curve_growing_train(X, y, model_name, steps=10, min_test_size=200):
+def plot_random_stratified_learning_curve(X, y, model_name, steps=10, fixed_test_size=500):
     sizes = []
     aucs = []
     aps = []
     accs = []
 
     total_samples = len(X)
-    max_train_size = total_samples - min_test_size
-    step_sizes = np.linspace(100, max_train_size, steps, dtype=int)
+    assert total_samples > fixed_test_size + 100, "Not enough data for learning curve."
 
-    print(f"\n--- Learning Curve for {model_name} ---")
+    # Step 1: stratified random split into test and pool
+    X_pool, X_test, y_pool, y_test = train_test_split(
+        X, y, test_size=fixed_test_size, stratify=y, random_state=42
+    )
+
+    step_sizes = np.linspace(100, len(X_pool) - 10, steps, dtype=int)
+
+    print(f"\n--- Learning Curve for {model_name} (Fixed 500 test set) ---")
     for size in step_sizes:
         print(f"Training with {size} samples...")
 
-        # Split: first `size` for training, rest for testing
-        X_train = X[:size]
-        y_train = y[:size]
-        X_test = X[size:]
-        y_test = y[size:]
+        try:
+            X_train, _, y_train, _ = train_test_split(
+                X_pool, y_pool, train_size=size, stratify=y_pool, random_state=size
+            )
+        except ValueError as e:
+            print(f"Skipping size {size} due to stratification error: {e}")
+            continue
 
-        # Skip if only one class in train or test (can't compute AUC)
-        if len(set(y_train)) < 2 or len(set(y_test)) < 2:
+        if len(set(y_train)) < 2:
             print(f"Skipping size {size} due to class imbalance.")
             continue
 
@@ -55,7 +63,7 @@ def plot_learning_curve_growing_train(X, y, model_name, steps=10, min_test_size=
     plt.plot(sizes, accs, label="Accuracy")
     plt.xlabel("Training Set Size")
     plt.ylabel("Score")
-    plt.title(f"Learning Curve: {model_name}")
+    plt.title(f"Learning Curve (Stratified, Disjoint Test): {model_name}")
     plt.ylim(0, 1)
     plt.legend()
     plt.grid(True)
@@ -63,7 +71,7 @@ def plot_learning_curve_growing_train(X, y, model_name, steps=10, min_test_size=
 
     # Save and show plot
     safe_name = model_name.replace(" ", "_").replace("(", "").replace(")", "").replace("-", "")
-    plt.savefig(f"{safe_name}_learning_curve.png")
+    plt.savefig(f"{safe_name}_stratified_learning_curve.png")
     plt.show(block=True)
 
 # --- Load Data ---
@@ -84,4 +92,4 @@ for filename, label in datasets:
     print(f"Encoding reviews using {label} model...")
     X_emb = model.encode(X_text, show_progress_bar=True)
 
-    plot_learning_curve_growing_train(X_emb, y, model_name=label)
+    plot_random_stratified_learning_curve(X_emb, y, model_name=label, steps=10, fixed_test_size=500)
