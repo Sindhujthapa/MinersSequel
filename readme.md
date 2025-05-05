@@ -66,7 +66,14 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 ## 1. Basic Sentiment Classifier
 
-4. Modeling Approach
+### 1.1 Benchmarks
+* AUC
+* Precision
+* Recall
+* ROC curve
+* Learning curve (rate of learning depending on how much data we feed the model)
+
+### 1.2 Methodology
 
 We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
@@ -75,10 +82,10 @@ Naive Bayes
 Random Forest
 Decision Tree
 Support Vector Classification (SVC)
-VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF)
+VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF, threshold optimization)
 Each model was assessed using AUC, precision, and recall.
 
-Evaluation Results
+### 1.3 Main Findings
 
 | Model                          | Precision | Recall |
 |-------------------------------|-----------|--------|
@@ -90,18 +97,19 @@ Evaluation Results
 | VADER                         | 0.81      | 0.90   |
 
 
-Best Performing: Logistic Regression and SVC
-Underperforming: Decision Tree and VADER
+* **Best Performing**: Logistic Regression and SVC
+* **Underperforming**: Decision Tree and VADER
 
-Model Limitations
+### 1.4 Model limitations
 
-Random Forest: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
-Decision Tree: Overfits if not pruned; not ideal for linear TF-IDF features.
-Logistic Regression: Struggles with sarcasm and complex sentiment not linearly separable.
-Naive Bayes: Assumes word independence; misses co-occurrences like “not good.”
-SVC: High accuracy, but slow and memory-intensive with large datasets.
-VADER: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
-Possible Extensions
+* **Random Forest**: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
+* **Decision Tree**: Overfits if not pruned; not ideal for linear TF-IDF features.
+* **Logistic Regression**: Struggles with sarcasm and complex sentiment not linearly separable.
+* **Naive Bayes**: Assumes word independence; misses co-occurrences like “not good.”
+* **SVC**: High accuracy, but slow and memory-intensive with large datasets.
+* **VADER**: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
+
+## Extensions
 
 Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
 Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
