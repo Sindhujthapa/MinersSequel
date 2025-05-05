@@ -1,11 +1,17 @@
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+import os
 from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score
 import matplotlib.pyplot as plt
 from sentence_transformers import SentenceTransformer
 import warnings
 warnings.filterwarnings("ignore")
+
+base_dir = os.path.dirname(os.path.dirname(__file__)) 
+filepath1 = os.path.join(base_dir, 'Scraper and Data', 'steam_reviews_unique.csv')
+
+filepath2 = os.path.join(base_dir, 'Scraper and Data', 'steam_reviews_balanced_esp.csv')
 
 def plot_learning_curve(X, y, model_name, steps=10):
     sizes = []
@@ -54,8 +60,8 @@ def plot_learning_curve(X, y, model_name, steps=10):
     plt.show()
 
 datasets = [
-    ("Scraper and data/steam_reviews_unique.csv", "Multilingual MiniLM (English)"),
-    ("Scraper and data/steam_reviews_balanced_esp.csv", "Multilingual MiniLM (Spanish - Balanced)")
+    (filepath1, "Multilingual MiniLM (English)"),
+    (filepath2, "Multilingual MiniLM (Spanish - Balanced)")
 ]
 
 model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")

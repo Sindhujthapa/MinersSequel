@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -77,8 +78,12 @@ def train_and_evaluate_models(X_train, X_test, y_train, y_test):
 
 # === MAIN PIPELINE ===
 if __name__ == '__main__':
-    # Load training data from Steam reviews
-    df_train = pd.read_csv("Scraper and Data/steam_reviews_unique.csv")
+    # Construct absolute path to CSV
+    base_dir = os.path.dirname(os.path.dirname(__file__))  # goes up from Sentiment/ to MinersSequel/
+    filepath = os.path.join(base_dir, 'Scraper and Data', 'steam_reviews_unique.csv')
+    
+    # Load Steam training data
+    df_train = pd.read_csv(filepath)
     df_train = compute_vader_sentiment(df_train)
 
     # Load IMDB test data

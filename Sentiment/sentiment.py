@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -121,7 +122,10 @@ def plot_learning_curves(models, X_train, y_train):
 
 
 if __name__ == '__main__':
-    df = load_data('Scraper and data/steam_reviews_unique.csv')
+    base_dir = os.path.dirname(os.path.dirname(__file__)) 
+    filepath = os.path.join(base_dir, 'Scraper and Data', 'steam_reviews_unique.csv')
+    df = load_data(filepath)
+
 
     df = compute_vader_sentiment(df)
 
