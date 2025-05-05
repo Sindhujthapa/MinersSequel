@@ -121,7 +121,7 @@ def plot_learning_curves(models, X_train, y_train):
 
 
 if __name__ == '__main__':
-    df = load_data('steam_reviews_unique.csv')
+    df = load_data('Scraper and data/steam_reviews_unique.csv')
 
     df = compute_vader_sentiment(df)
 
