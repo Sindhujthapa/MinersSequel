@@ -205,6 +205,7 @@ For both models, increasing the sample size only slightly improves the performan
 * Clone the repository
 * Install the required dependencies using requirements.txt
 * Run the codes scraping_final.py, scraping_spanish.py, steam_reviews_balanced_esp.csv, steam_reviews_unique.csv in the folder Scraper and Data
+  * Warning: The steam API only extracts reviews written 365 days prior to the API call. Therefore, running the scraping code might give different data sets and consequently different results.  
 * Run the code in the file sentiment.py located in the folder Sentiment
 * Run the code in the file robustness.py located in the folder Sentiment to check for robustness
 * Run the code in the file embeddings.py located in the folder SBERT
