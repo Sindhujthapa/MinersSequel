@@ -43,6 +43,8 @@ def evaluate_model_with_roc(X, y, model_name, roc_data):
     print(f"AUC: {auc:.4f}")
     print(f"Average Precision: {ap:.4f}")
     print("Best parameters:", grid_search.best_params_)
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
 
     return auc, ap
 
@@ -158,8 +160,11 @@ print("\n--- Evaluation (Train: Steam | Test: IMDB) ---")
 print(f"AUC: {auc:.4f}")
 print(f"Average Precision: {ap:.4f}")
 print("Best Logistic Regression Params:", grid_search.best_params_)
+print("Classification Report:")
+print(classification_report(y_imdb, y_pred))
 
 # --- Bias Language Execution ---
+df_en = pd.read_csv("steam_reviews_unique.csv", encoding="utf-8-sig")
 n_en, n_es = len(df_en), len(df_es)
 target_size = min(n_en, n_es)
 
@@ -193,6 +198,8 @@ print("\n--- Cross-lingual Evaluation (Train: EN | Test: ES) ---")
 print(f"AUC: {auc:.4f}")
 print(f"Average Precision: {ap:.4f}")
 print("Best Logistic Regression Params:", grid_search.best_params_)
+print("Classification Report:")
+print(classification_report(y_es, y_pred))
 
 
 #Evaluate on English embeddings
@@ -210,4 +217,6 @@ print("\n--- Cross-lingual Evaluation (Train: ES | Test: EN) ---")
 print(f"AUC: {auc:.4f}")
 print(f"Average Precision: {ap:.4f}")
 print("Best Logistic Regression Params:", grid_search.best_params_)
+print("Classification Report:")
+print(classification_report(y_en, y_pred))
 
