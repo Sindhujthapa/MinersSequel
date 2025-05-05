@@ -116,12 +116,13 @@ We downloaded a dataset from Hugging Face that lists movie reviews with sentimen
 #### ii. Performance across training set size.
 To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations. 
 Here's how our benchmarks changed with increasing training set size:
-
-
+![image](learning_curve_train_size_en.png)
+![image](learning_curve_train_size_es.png)
 
 #### iii. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
-
+![image](Learning_curve_sample_size_english.png)
+![image](Learning_curve_sample_size_spanish.png)
 
 ### 2.2 Benchmarks
 
