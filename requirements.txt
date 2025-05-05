@@ -5,3 +5,4 @@ numpy
 seaborn
 vaderSentiment
 datasets
+sentence_transformers
