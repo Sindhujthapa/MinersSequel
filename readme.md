@@ -16,7 +16,7 @@ Our project aims to:
 
 5. Optimize model parameters and dataset choices for each technique.
 
-6. Test model robustness by introducing non-gaming data to evaluate domain sensitivity of embedding-based models.
+6. Test model robustness by introducing non-gaming data.
 
 ## Data Sources 
 We used the [Steam API](https://partner.steamgames.com/doc/store/getreviews) to scrape game reviews directly from the gaming website. To manage the balance of upvotes and ensure that we have a sizeable amount of reviews, we choose our games specifically. Specifically, these games had, at least, more than 10,000 recent reviews. The following table shows the games considered.
@@ -67,15 +67,14 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 ## 1. Basic Sentiment Classifier
 
 ### 1.1 Benchmarks
-* AUC
+* ROC-AUC
 * Precision
 * Recall
-* ROC curve
-* Learning curve (rate of learning depending on how much data we feed the model)
+* Learning curve
 
 ### 1.2 Methodology
 
-We used Term Frequency–Inverse Document Frequency (TF-IDF) vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
+We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
 * Logistic Regression
 * Naive Bayes
@@ -118,26 +117,21 @@ Each model was assessed using AUC, precision, and recall.
 | Support Vector Classification (SVC) | 0.81      | 0.87   | 0.82|
 | VADER                         | 0.79      | 0.86   | 0.78 |
 
-After checking for the accuracy in the original dataset called steam_reviews_unique.csv we tested all the models in IMDB dataset where precision, recall and accuracy seems to be slightly declined. However, the ranking was preserved as logistic regression & SVC preformed the best and VADAR & Decision tree performed the worst. 
+After checking for the accuracy in the original dataset called steam_reviews_unique.csv we tested all the models in the IMDB dataset, where precision, recall, and accuracy seem to have slightly declined. However, the ranking was preserved as logistic regression & SVC performed the best, and VADER & Decision tree performed the worst. 
 ### 1.5 Model limitations
 
-* **Decision Tree & Random Fores**t: As tree-based algorithms, both models are prone to overfitting, particularly on noisy or high-dimensional data such as TF-IDF features.
+* **Decision Tree & Random Forest**: As tree-based algorithms, both models are prone to overfitting, particularly on noisy or high-dimensional data such as TF-IDF features.
 * **Logistic Regression**: Works well for simple patterns, but can miss sarcasm or complex sentiment that doesn’t follow a straight line.
-* **Naive Bayes**: Assumes word independence so gets problems with phrases like “not good.”
-* **SVC**: Takes longer to train and uses more memory—especially when dealing with lots of reviews.
-* **VADER**: Rule-based and cannot learn from context or domain-specific language (e.g., gaming slang or sarcasm). Struggles with negation, and sarcasm, and lacks context awareness.
+* **Naive Bayes**: Assumes word independence, so gets problems with phrases like “not good.”
+* **SVC**: Takes longer to train and uses more memory, especially when dealing with lots of reviews.
+* **VADER**: Rule-based and cannot learn from context or domain-specific language (e.g., gaming slang or sarcasm). Struggles with negation and sarcasm, and lacks context awareness.
 
-### 1.6 Extensions
-
-* Instead of relying on TF-IDF, we could use modern language models (like BERT) that understand the context of words (capture sarcasm, tone, and subtle meaning in reviews).
-* Rather than just labeling reviews as positive or negative, we could expand the analysis to identify emotions like joy, anger, or frustration for deeper insights.
-* VADER's sentiment score could be added as a feature in machine learning models, blending human-coded rules with data-driven learning
 ## 2. Embedding 
 
 ### 2.1 Benchmarks
-* AUC
+* ROC-AUC
 * Average Precision
-* ROC curve
+* Recall
 * Learning curve (rate of learning depending on how much data we feed the model)
 
 ### 2.2 Methodology
@@ -160,13 +154,31 @@ The next plot shows the ROC curve:
 
 ![image](Figure/ROC_curve.jpeg)
 
-#### i. Performance across other data (movie reviews)
-We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
+| **Model**                | **Train/Test** | **F1-Score (Class 0)** | **F1-Score (Class 1)** | **Macro Avg** | **Weighted Avg** |
+| ------------------------ | -------------- | ---------------------- | ---------------------- | ------------- | ---------------- |
+| MiniLM-English           | EN/EN          | 0.80                   | 0.82                   | 0.81          | 0.81             |
+| MiniLM-Multilingual (EN) | EN/EN          | 0.80                   | 0.81                   | 0.81          | 0.81             |
+| MiniLM-Multilingual (ES) | ES/ES          | 0.80                   | 0.79                   | 0.80          | 0.80             |
+
+
+
+#### i. Performance across other data (movie reviews) and languages 
+We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. 
+
+Additionally, we also tested the language capabilities of paraphrase-Multilingual-MiniLM-L12-v2 by training the classifier in one language and testing it with another.
+
+We noticed the following performance across the benchmarks:
 | Evaluation Setting                      | AUC    | Average Precision | Best Logistic Regression Params                     |
 |----------------------------------------|--------|-------------------|-----------------------------------------------------|
 | Train: Steam<br>Test: IMDB             | 0.8168 | 0.8200            | {'C': 0.1, 'penalty': 'l2', 'solver': 'liblinear'}  |
 | Train: EN (Steam)<br>Test: ES (Steam)  | 0.8726 | 0.8701            | {'C': 0.1, 'penalty': 'l2', 'solver': 'lbfgs'}      |
 | Train: ES (Steam)<br>Test: EN (Steam)  | 0.8743 | 0.8702            | {'C': 1, 'penalty': 'l2', 'solver': 'liblinear'}    |
+
+| **Model**                | **Train/Test** | **F1-Score (Class 0)** | **F1-Score (Class 1)** | **Macro Avg** | **Weighted Avg** |
+| ------------------------ | -------------- | ---------------------- | ---------------------- | ------------- | ---------------- |
+| MiniLM-English → IMDB    | EN/IMDB        | 0.58                   | 0.74                   | 0.66          | 0.66             |
+| MiniLM-Multilingual → ES | EN/ES          | 0.78                   | 0.80                   | 0.79          | 0.79             |
+| MiniLM-Multilingual → EN | ES/EN          | 0.80                   | 0.79                   | 0.79          | 0.79             |
 
 
 #### ii. Performance across training set size.
@@ -200,9 +212,7 @@ For both models, increasing the sample size only slightly improves the performan
 * Add features like hours played, game genre, review length, or user reputation to see if these improve classification performance.
 * Perform a detailed analysis of misclassified examples to understand model blind spots.
 * Instead of using the dataset to classify sentiment in positive and negative reviews, we can use Latent Dirichlet Allocation (LDA) or BERTopic for topic-level modelling.
-
-## Declaration of Work
-
+* VADER's sentiment score could be added as a feature in machine learning models, blending human-coded rules with data-driven learning
   
 ## Appendix
 * Clone the repository
@@ -214,3 +224,6 @@ For both models, increasing the sample size only slightly improves the performan
 * Run the code in the file embeddings.py located in the folder SBERT
 * Run the code in the file learning_curve_sample.py located in the folder SBERT
 * Run the code in the file learning_curve_training.py located in the folder SBERT
+
+
+## Declaration of Work
