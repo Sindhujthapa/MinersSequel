@@ -200,3 +200,19 @@ For both models, increasing the sample size only slightly improves the performan
 * Add features like hours played, game genre, review length, or user reputation to see if these improve classification performance.
 * Perform a detailed analysis of misclassified examples to understand model blind spots.
 * Instead of using the dataset to classify sentiment in positive and negative reviews, we can use Latent Dirichlet Allocation (LDA) or BERTopic for topic-level modelling.
+  
+## Appendix
+* Clone the repository
+* Install the required dependencies using requirements.txt
+* Run the codes scraping_final.py, scraping_spanish.py, steam_reviews_balanced_esp.csv, steam_reviews_unique.csv in the folder Scraper and Data
+* Run the code in the file sentiment.py located in the folder Sentiment
+* Run the code in the file robustness.py located in the folder Sentiment to check for robustness
+* Run the code in the file embeddings.py located in the folder SBERT
+* Run the code in the file learning_curve_sample.py located in the folder SBERT
+* Run the code in the file learning_curve_training.py located in the folder SBERT
+
+
+
+
+
+Run the code in the file cleaner_final.py to clean and convert variables into the desired format for cross-sectional models
