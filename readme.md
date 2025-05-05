@@ -200,6 +200,9 @@ For both models, increasing the sample size only slightly improves the performan
 * Add features like hours played, game genre, review length, or user reputation to see if these improve classification performance.
 * Perform a detailed analysis of misclassified examples to understand model blind spots.
 * Instead of using the dataset to classify sentiment in positive and negative reviews, we can use Latent Dirichlet Allocation (LDA) or BERTopic for topic-level modelling.
+
+## Declaration of Work
+
   
 ## Appendix
 * Clone the repository
