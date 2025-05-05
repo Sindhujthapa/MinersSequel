@@ -15,37 +15,33 @@ from sklearn.metrics import (
     roc_auc_score, roc_curve, confusion_matrix, classification_report, f1_score
 )
 
-# Load data
 def load_data(filepath):
     df = pd.read_csv(filepath)
     print("Data preview:")
     print(df.head())
     return df
 
-# VADER sentiment scoring
+
 def compute_vader_sentiment(df):
     analyzer = SentimentIntensityAnalyzer()
     df['vader_score'] = df['review'].astype(str).apply(lambda x: analyzer.polarity_scores(x)['compound'])
     return df
 
-# Choose best threshold based on F1 score (TRAIN ONLY)
 def determine_best_threshold(df_train, y_col='voted_up', score_col='vader_score'):
     thresholds = np.linspace(-1, 1, 100)
     y_true = df_train[y_col]
     best_thresh = max(thresholds, key=lambda t: f1_score(y_true, (df_train[score_col] >= t).astype(int)))
     return best_thresh
 
-# TF-IDF vectorization
 def vectorize_text(df, text_col='review'):
     vectorizer = TfidfVectorizer(max_features=1000)
     X = vectorizer.fit_transform(df[text_col].astype(str))
     return X, vectorizer
 
-# Train-test split
+
 def split_data(df):
     return train_test_split(df, test_size=0.2, random_state=42, stratify=df['voted_up'])
 
-# Evaluate VADER scores
 def evaluate_vader(df_test, best_thresh):
     y_true = df_test['voted_up']
     y_pred = (df_test['vader_score'] >= best_thresh).astype(int)
@@ -53,7 +49,6 @@ def evaluate_vader(df_test, best_thresh):
     fpr, tpr, _ = roc_curve(y_true, df_test['vader_score'])
     return y_true, y_pred, df_test['vader_score'], fpr, tpr, auc
 
-# Train models
 def train_and_evaluate_models(X_train, X_test, y_train, y_test):
     models = {
         'Decision Tree': DecisionTreeClassifier(random_state=42),
@@ -74,7 +69,6 @@ def train_and_evaluate_models(X_train, X_test, y_train, y_test):
         print(f"AUC ({name}): {auc:.3f}")
     return models, model_outputs
 
-# Confusion matrix
 def plot_confusion_matrices(model_outputs):
     for name, (y_true, y_pred, _, _, _, _) in model_outputs.items():
         cm = confusion_matrix(y_true, y_pred)
@@ -90,7 +84,6 @@ def plot_confusion_matrices(model_outputs):
         print(f"Classification Report - {name}")
         print(classification_report(y_true, y_pred, target_names=['Negative', 'Positive']))
 
-# ROC Curve
 def plot_roc_curves(model_outputs):
     plt.figure(figsize=(10, 7))
     for name, (_, _, _, fpr, tpr, auc) in model_outputs.items():
@@ -104,7 +97,6 @@ def plot_roc_curves(model_outputs):
     plt.tight_layout()
     plt.show()
 
-# Learning curves
 def plot_learning_curves(models, X_train, y_train):
     plt.figure(figsize=(10, 7))
     colors = plt.colormaps.get_cmap('tab10')
@@ -127,39 +119,30 @@ def plot_learning_curves(models, X_train, y_train):
     plt.tight_layout()
     plt.show()
 
-# === MAIN PIPELINE ===
+
 if __name__ == '__main__':
-    # Step 1: Load
     df = load_data('steam_reviews_unique.csv')
 
-    # Step 2: VADER Sentiment
     df = compute_vader_sentiment(df)
 
-    # Step 3: Train-Test Split
     df_train, df_test = split_data(df)
 
-    # Step 4: Determine best threshold only from training data
     best_thresh = determine_best_threshold(df_train)
 
-    # Step 5: Apply threshold to create vader_label for both
     df_train['vader_label'] = (df_train['vader_score'] >= best_thresh).astype(int)
     df_test['vader_label'] = (df_test['vader_score'] >= best_thresh).astype(int)
 
-    # Step 6: Text Vectorization
     X_train, vectorizer = vectorize_text(df_train)
     X_test = vectorizer.transform(df_test['review'].astype(str))
     y_train = df_train['voted_up']
     y_test = df_test['voted_up']
 
-    # Step 7: VADER Evaluation
     y_vader_true, y_vader_pred, vader_scores, fpr_vader, tpr_vader, auc_vader = evaluate_vader(df_test, best_thresh)
     model_outputs = {'VADER': (y_vader_true, y_vader_pred, vader_scores, fpr_vader, tpr_vader, auc_vader)}
 
-    # Step 8: Model Training
     models, outputs = train_and_evaluate_models(X_train, X_test, y_train, y_test)
     model_outputs.update(outputs)
 
-    # Step 9: Visualizations
     plot_confusion_matrices(model_outputs)
     plot_roc_curves(model_outputs)
     plot_learning_curves(models, X_train, y_train)
