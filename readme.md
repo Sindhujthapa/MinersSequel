@@ -86,6 +86,10 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 * Each model was assessed using AUC, precision, and recall.
 
 ### 1.3 Main Findings
+* **ROC curves**:
+* ![image](Figure/ROC.png)
+* **Learning curves**:
+* ![image](Figure/lc.png)
 
 | Model                          | Precision | Recall |
 |-------------------------------|-----------|--------|
@@ -98,7 +102,9 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 
 
 * **Best Performing**: Logistic Regression and SVC
+* ![image](Figure/best.png)
 * **Underperforming**: Decision Tree and VADER
+* ![image](Figure/worst.png)
 
 ### 1.4 Model limitations
 
