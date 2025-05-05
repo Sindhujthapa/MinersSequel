@@ -78,7 +78,7 @@ def train_and_evaluate_models(X_train, X_test, y_train, y_test):
 # === MAIN PIPELINE ===
 if __name__ == '__main__':
     # Load training data from Steam reviews
-    df_train = pd.read_csv("steam_reviews_unique.csv")
+    df_train = pd.read_csv("Scraper and Data/steam_reviews_unique.csv")
     df_train = compute_vader_sentiment(df_train)
 
     # Load IMDB test data
