@@ -75,7 +75,7 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 ### 1.2 Methodology
 
-We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
+We used Term Frequency–Inverse Document Frequency (TF-IDF) vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
 * Logistic Regression
 * Naive Bayes
