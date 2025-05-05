@@ -139,7 +139,7 @@ After running both types of models, we noticed the following performance across 
 
 The next plot shows the ROC curve:
 
-![image](ROC_curve.jpeg)
+![image](Figure/ROC_curve.jpeg)
 
 ### 2.4 Robustness checks
 #### i. Performance across other data (movie reviews)
@@ -154,17 +154,17 @@ We downloaded a dataset from Hugging Face that lists movie reviews with sentimen
 #### ii. Performance across training set size.
 To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size (500 observations) across increasing training sizes. All training samples are randomly selected and stratified to maintain balance in observations. 
 Here's how our benchmarks changed with increasing training set size:
-![image](learning_curve_train_size_en.png)
+![image](Figure/learning_curve_train_size_en.png)
 
-![image](Learning_curve_train_size_es.png)
+![image](Figure/Learning_curve_train_size_es.png)
 
 For both models, increasing the training set size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a training set size of around 2200.
 #### iii. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
 Here's how our benchmarks changed with increasing sample size:
-![image](Learning_curve_sample_size_english.png)
+![image](Figure/Learning_curve_sample_size_english.png)
 
-![image](Learning_curve_sample_size_spanish.png)
+![image](Figure/Learning_curve_sample_size_spanish.png)
 
 For both models, increasing the sample size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a sample size of around 1500.
 
