@@ -66,7 +66,7 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 ## 1. Basic Sentiment Classifier
 
-📊 4. Modeling Approach
+4. Modeling Approach
 
 We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
@@ -78,20 +78,22 @@ Support Vector Classification (SVC)
 VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF)
 Each model was assessed using AUC, precision, and recall.
 
-✅ Evaluation Results
+Evaluation Results
 
-Model	Precision	Recall
-Logistic Regression	0.83	0.85
-Naive Bayes	0.82	0.85
-Random Forest	0.77	0.80
-Decision Tree	0.66	0.70
-Support Vector (SVC)	0.83	0.85
-VADER	0.81	0.90
+| Model                          | Precision | Recall |
+|-------------------------------|-----------|--------|
+| Logistic Regression           | 0.83      | 0.85   |
+| Naive Bayes                   | 0.82      | 0.85   |
+| Random Forest                 | 0.77      | 0.80   |
+| Decision Tree                 | 0.66      | 0.70   |
+| Support Vector Classification (SVC) | 0.83      | 0.85   |
+| VADER                         | 0.81      | 0.90   |
+
 
 Best Performing: Logistic Regression and SVC
 Underperforming: Decision Tree and VADER
 
-⚠️ Model Limitations
+⚠Model Limitations
 
 Random Forest: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
 Decision Tree: Overfits if not pruned; not ideal for linear TF-IDF features.
@@ -99,7 +101,7 @@ Logistic Regression: Struggles with sarcasm and complex sentiment not linearly s
 Naive Bayes: Assumes word independence; misses co-occurrences like “not good.”
 SVC: High accuracy, but slow and memory-intensive with large datasets.
 VADER: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
-🚀 Possible Extensions
+Possible Extensions
 
 Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
 Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
