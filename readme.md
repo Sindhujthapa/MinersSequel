@@ -154,12 +154,14 @@ The next plot shows the ROC curve:
 
 ![image](Figure/ROC_curve.jpeg)
 
+
 | **Model**                | **Train/Test** | **F1-Score (Class 0)** | **F1-Score (Class 1)** | **Macro Avg** | **Weighted Avg** |
 | ------------------------ | -------------- | ---------------------- | ---------------------- | ------------- | ---------------- |
 | MiniLM-English           | EN/EN          | 0.80                   | 0.82                   | 0.81          | 0.81             |
 | MiniLM-Multilingual (EN) | EN/EN          | 0.80                   | 0.81                   | 0.81          | 0.81             |
 | MiniLM-Multilingual (ES) | ES/ES          | 0.80                   | 0.79                   | 0.80          | 0.80             |
 
+The baseline English model and multilingual model on English reviews both perform very well, with F1-scores around 0.81 for both classes, showing balanced precision and recall. The multilingual model on Spanish reviews performs slightly worse (~0.80 F1) but is still strong, indicating good language generalization.
 
 
 #### i. Performance across other data (movie reviews) and languages 
@@ -180,6 +182,7 @@ We noticed the following performance across the benchmarks:
 | MiniLM-Multilingual → ES | EN/ES          | 0.78                   | 0.80                   | 0.79          | 0.79             |
 | MiniLM-Multilingual → EN | ES/EN          | 0.80                   | 0.79                   | 0.79          | 0.79             |
 
+When testing the MiniLM-English model with IMDB data, we observe the biggest drop in performance, especially for class 0 (F1 = 0.58), meaning the model has trouble identifying negative sentiment in a different domain. The multilingual evaluations maintain strong and balanced F1-scores (~0.79–0.80), demonstrating that the multilingual model transfers well between English and Spanish despite being trained on one language only.
 
 #### ii. Performance across training set size.
 To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size (500 observations) across increasing training sizes. All training samples are randomly selected and stratified to maintain balance in observations. 
@@ -200,10 +203,12 @@ For both models, increasing the sample size only slightly improves the performan
 
 ### 2.4 Model limitations
 * While these models still perform well, they don't perform as well as the TF-IDF-based model. This implies that converting sentences into dense semantic embeddings doesn't have a lot of value.
+* The model performed poorly in F1 scores when testing the classifier for movie reviews.
 * This dataset is ideal for most types of models, and training on this dataset also extends predictions to other datasets. So the actual strength/robustness of our models can be difficult to discern.
 
 ## Conclusion
-* We were considerably successful at predicting user sentiments (AUC > 0.85 across all models), even for reviews that were not related to video games and for reviews in other languages.
+* We were considerably successful at predicting user sentiments (AUC > 0.85 across all models), even for reviews in other languages.
+* There were mixed results when testing on movie reviews. Specifically, for negative reviews, there was a low F1 score. This suggests that negative reviews may use specific terminology while positive reviews are more generalizable.
 * For sentiment analysis, the TF-IDF vectorizer is a more scalable approach over platforms. Sbert models are useful only in cases where multiple languages are being considered.
 * Among all the classifier options, logistic regression performed consistently well for all types of word/sentence processors.
 
@@ -212,13 +217,13 @@ For both models, increasing the sample size only slightly improves the performan
 * Add features like hours played, game genre, review length, or user reputation to see if these improve classification performance.
 * Perform a detailed analysis of misclassified examples to understand model blind spots.
 * Instead of using the dataset to classify sentiment in positive and negative reviews, we can use Latent Dirichlet Allocation (LDA) or BERTopic for topic-level modelling.
-* VADER's sentiment score could be added as a feature in machine learning models, blending human-coded rules with data-driven learning
+* VADER's sentiment score could be added as a feature in machine learning models, blending human-coded rules with data-driven learning.
   
 ## Appendix
 * Clone the repository
 * Install the required dependencies using requirements.txt
 * Run the codes scraping_final.py, scraping_spanish.py, steam_reviews_balanced_esp.csv, steam_reviews_unique.csv in the folder Scraper and Data
-  * Warning: The steam API only extracts reviews written 365 days prior to the API call. Therefore, running the scraping code might give different data sets and consequently different results.  
+  * Warning: The Steam API only extracts reviews written 365 days prior to the API call. Therefore, running the scraping code might give different data sets and consequently different results.  
 * Run the code in the file sentiment.py located in the folder Sentiment
 * Run the code in the file robustness.py located in the folder Sentiment to check for robustness
 * Run the code in the file embeddings.py located in the folder SBERT
