@@ -49,11 +49,11 @@ def evaluate_model_with_roc(X, y, model_name, roc_data):
     return auc, ap
 
 
-df_en = pd.read_csv("steam_reviews_unique.csv", encoding="utf-8-sig")
+df_en = pd.read_csv("Scraper and Data/steam_reviews_unique.csv", encoding="utf-8-sig")
 X_en = df_en["review"].astype(str).tolist()
 y_en = df_en["voted_up"].astype(int)
 
-df_es = pd.read_csv("steam_reviews_balanced_esp.csv", encoding="utf-8-sig")
+df_es = pd.read_csv("Scraper and Data/steam_reviews_balanced_esp.csv", encoding="utf-8-sig")
 X_es = df_es["review"].astype(str).tolist()
 y_es = df_es["voted_up"].astype(int)
 
@@ -164,7 +164,7 @@ print("Classification Report:")
 print(classification_report(y_imdb, y_pred))
 
 # --- Bias Language Execution ---
-df_en = pd.read_csv("steam_reviews_unique.csv", encoding="utf-8-sig")
+df_en = pd.read_csv("Scraper and Data/steam_reviews_unique.csv", encoding="utf-8-sig")
 n_en, n_es = len(df_en), len(df_es)
 target_size = min(n_en, n_es)
 
