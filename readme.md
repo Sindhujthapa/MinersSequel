@@ -101,6 +101,8 @@ After running both types of models, we noticed the following performance across 
 
 The next plot shows the ROC curve:
 
+[image](ROC_curve.jpeg)
+
 ### 2.4 Robustness checks
 #### i. Performance across other data (movie reviews)
 We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
