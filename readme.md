@@ -235,16 +235,15 @@ For both models, increasing the sample size only slightly improves the performan
 
 Nilay
 - Scraping, cleaning, and merging
-- Embedding English
-- Embedding Spanish
+- Implementation of paraphrase-Multilingual-MiniLM-L12-v2
 - Robustness Check
 - Readme
     
 Vasco
 - Scraping, cleaning, and merging
-- Embedding English
-- Embedding Spanish
-- Robustness Check
+- Implementation of all-MiniLM-L6-v2
+- Combined embedding benchmarks
+- IMDB robustness check
 - Readme
   
 Mariia
