@@ -232,3 +232,33 @@ For both models, increasing the sample size only slightly improves the performan
 
 
 ## Declaration of Work
+
+Nilay
+- Scraping, cleaning, and merging
+- Embedding English
+- Embedding Spanish
+- Robustness Check
+- Readme
+    
+Vasco
+- Scraping, cleaning, and merging
+- Embedding English
+- Embedding Spanish
+- Robustness Check
+- Readme
+  
+Mariia
+- Scraping
+- Decision Tree
+- VADER
+- SVC
+- Robustness Check
+- Readme
+  
+Sindhuj
+- Scraping
+- Random Forest
+- Logistic Regression
+- Naive Bayes
+- Robustness Check
+- Readme
