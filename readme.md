@@ -77,13 +77,13 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
-Logistic Regression
-Naive Bayes
-Random Forest
-Decision Tree
-Support Vector Classification (SVC)
-VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF, threshold optimization)
-Each model was assessed using AUC, precision, and recall.
+* Logistic Regression
+* Naive Bayes
+* Random Forest
+* Decision Tree
+* Support Vector Classification (SVC)
+* VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF, threshold optimization)
+* Each model was assessed using AUC, precision, and recall.
 
 ### 1.3 Main Findings
 
@@ -111,9 +111,9 @@ Each model was assessed using AUC, precision, and recall.
 
 ### 1.5 Extensions
 
-Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
-Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
-Hybrid Models: Combine VADER with ML models by using its output as an input feature.
+* Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
+* Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
+* Hybrid Models: Combine VADER with ML models by using its output as an input feature.
 ## 2. Embedding 
 
 ### 2.1 Benchmarks
