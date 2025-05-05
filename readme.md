@@ -109,7 +109,7 @@ Each model was assessed using AUC, precision, and recall.
 * **SVC**: High accuracy, but slow and memory-intensive with large datasets.
 * **VADER**: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
 
-## Extensions
+### 1.5 Extensions
 
 Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
 Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
