@@ -66,16 +66,44 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 
 ## 1. Basic Sentiment Classifier
 
-* Logistic Regression
-* Other Classifier models seen in class
-* Based on Polarity scoring (check python libraries like [VADER](https://melaniewalsh.github.io/Intro-Cultural-Analytics/05-Text-Analysis/04-Sentiment-Analysis.html))
+📊 4. Modeling Approach
 
-### 1.1 Benchmarks
-* AUC
-* Average Precision
-* ROC curve
-* Learning curve (rate of learning depending on how much data we feed the model)
+We used TF-IDF vectorization to convert text reviews into numerical features suitable for machine learning, and applied a stratified train-test split to preserve class balance. Our analysis evaluated six models:
 
+Logistic Regression
+Naive Bayes
+Random Forest
+Decision Tree
+Support Vector Classification (SVC)
+VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF)
+Each model was assessed using AUC, precision, and recall.
+
+✅ Evaluation Results
+
+Model	Precision	Recall
+Logistic Regression	0.83	0.85
+Naive Bayes	0.82	0.85
+Random Forest	0.77	0.80
+Decision Tree	0.66	0.70
+Support Vector (SVC)	0.83	0.85
+VADER	0.81	0.90
+
+Best Performing: Logistic Regression and SVC
+Underperforming: Decision Tree and VADER
+
+⚠️ Model Limitations
+
+Random Forest: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
+Decision Tree: Overfits if not pruned; not ideal for linear TF-IDF features.
+Logistic Regression: Struggles with sarcasm and complex sentiment not linearly separable.
+Naive Bayes: Assumes word independence; misses co-occurrences like “not good.”
+SVC: High accuracy, but slow and memory-intensive with large datasets.
+VADER: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
+🚀 Possible Extensions
+
+Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
+Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
+Hybrid Models: Combine VADER with ML models by using its output as an input feature.
 ## 2. Embedding 
 
 ### 2.1 Benchmarks
