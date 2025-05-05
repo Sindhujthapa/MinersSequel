@@ -210,9 +210,3 @@ For both models, increasing the sample size only slightly improves the performan
 * Run the code in the file embeddings.py located in the folder SBERT
 * Run the code in the file learning_curve_sample.py located in the folder SBERT
 * Run the code in the file learning_curve_training.py located in the folder SBERT
-
-
-
-
-
-Run the code in the file cleaner_final.py to clean and convert variables into the desired format for cross-sectional models
