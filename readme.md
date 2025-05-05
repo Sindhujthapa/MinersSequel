@@ -59,6 +59,7 @@ The final English dataset was perfectly balanced. However, the Spanish dataset w
 * Some reviews do not consider correct sentence structure. For instance, a review could just contain emojis or single-word responses like trash, legendary, perfect, etc. So certain classifiers that consider context and the placement of words within a sentence could notice inaccuracies or be unusable altogether.
 * Certain terminology may be unique to specific games. As a result, several words may be associated with the value of that specific game rather than general sentiments.
 * Reviews with nuance in them may not be completely representative of the "upvote" indicator. For instance, when someone uses "I liked this game but...", it could contain information valuable to both positive and negative predictions.
+* Given that upvotes are binary, users can't express their degree of positive/negative opinion. 
 * Reviews can be used to increase a user's account level on Steam. Because of such instances, certain reviews are not genuine/are rushed.
 
 
@@ -114,27 +115,33 @@ We downloaded a dataset from Hugging Face that lists movie reviews with sentimen
 
 
 #### ii. Performance across training set size.
-To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size across increasing training sizes. All samples are randomly selected and stratified to maintain balance in observations. 
+To test how our model's performance changes with training group size, we plot these benchmarks for a fixed test size (500 observations) across increasing training sizes. All training samples are randomly selected and stratified to maintain balance in observations. 
 Here's how our benchmarks changed with increasing training set size:
 ![image](learning_curve_train_size_en.png)
 
 ![image](Learning_curve_train_size_es.png)
 
+For both models, increasing the training set size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a training set size of around 2200.
 #### iii. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
+Here's how our benchmarks changed with increasing sample size:
 ![image](Learning_curve_sample_size_english.png)
 
 ![image](Learning_curve_sample_size_spanish.png)
 
-### 2.2 Benchmarks
+For both models, increasing the sample size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a sample size of around 1500.
 
-* Same as 1.1
-* Check what happens if: 
-  1. Use English embedding with English data, 
-  2. multilingual embedding with Spanish (other language) data, 
-  3. multilingual with English
+### 2.4 Model limitations
+* While these models still perform well, they don't perform as well as the TF-IDF-based model. This implies that converting sentences into dense semantic embeddings doesn't have a lot of value.
+* This dataset is ideal for most types of models, and training on this dataset also extends predictions to other datasets. So the actual strength/robustness of our models can be difficult to discern.
 
-## Comparisons between 1 and 2
+## Conclusion
+* We were considerably successful at predicting user sentiments (AUC > 0.85 across all models), even for reviews that were not related to video games and for reviews in other languages.
+* For sentiment analysis, the TF-IDF vectorizer is a more scalable approach over platforms. Sbert models are useful only in cases where multiple languages are being considered.
+* Among all the classifier options, logistic regression performed consistently well for all types of word/sentence processors.
 
-* Check how they compare with the Steam data
-* Check how they do with data from other settings and how they compare
+## Extensions
+* Instead of a binary upvote option, look for a dataset with a scale of sentiment options (Ex, 1-10).
+* Add features like hours played, game genre, review length, or user reputation to see if these improve classification performance.
+* Perform a detailed analysis of misclassified examples to understand model blind spots.
+* Instead of using the dataset to classify sentiment in positive and negative reviews, we can use Latent Dirichlet Allocation (LDA) or BERTopic for topic-level modelling.
