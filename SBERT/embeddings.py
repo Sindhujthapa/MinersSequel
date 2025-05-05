@@ -9,7 +9,7 @@ from datasets import load_dataset
 import warnings
 warnings.filterwarnings("ignore")
 
-# --- Updated Evaluation Function with ROC data collection ---
+
 def evaluate_model_with_roc(X, y, model_name, roc_data):
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
 
@@ -46,7 +46,7 @@ def evaluate_model_with_roc(X, y, model_name, roc_data):
 
     return auc, ap
 
-# --- Load datasets ---
+
 df_en = pd.read_csv("steam_reviews_unique.csv", encoding="utf-8-sig")
 X_en = df_en["review"].astype(str).tolist()
 y_en = df_en["voted_up"].astype(int)
@@ -55,14 +55,14 @@ df_es = pd.read_csv("steam_reviews_balanced_esp.csv", encoding="utf-8-sig")
 X_es = df_es["review"].astype(str).tolist()
 y_es = df_es["voted_up"].astype(int)
 
-# --- Initialize models ---
+
 models = {
     "MiniLM-English": SentenceTransformer("all-MiniLM-L6-v2"),
     "MiniLM-Multilingual (EN)": SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2"),
     "MiniLM-Multilingual (ES)": SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 }
 
-# --- Main Execution ---
+
 roc_data = {}
 
 print("Encoding English reviews with English model...")
@@ -77,7 +77,7 @@ print("\nEncoding Spanish reviews with Multilingual model...")
 emb_es = models["MiniLM-Multilingual (ES)"].encode(X_es, show_progress_bar=True)
 evaluate_model_with_roc(emb_es, y_es, "MiniLM-Multilingual (ES)", roc_data)
 
-# --- Combined ROC Curve Plot ---
+
 plt.figure(figsize=(10, 7))
 for name, (fpr, tpr, auc) in roc_data.items():
     plt.plot(fpr, tpr, label=f"{name} (AUC = {auc:.2f})")
