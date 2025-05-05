@@ -83,7 +83,7 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 * Decision Tree
 * Support Vector Classification (SVC)
 * VADER (a rule-based sentiment analyzer working directly on raw text without TF-IDF, threshold optimization)
-* Each model was assessed using AUC, precision, and recall.
+Each model was assessed using AUC, precision, and recall.
 
 ### 1.3 Main Findings
 
