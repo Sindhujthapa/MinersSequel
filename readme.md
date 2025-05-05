@@ -191,7 +191,7 @@ Here's how our benchmarks changed with increasing training set size:
 
 ![image](Figure/Learning_curve_train_size_es.png)
 
-For both models, increasing the training set size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a training set size of around 2200.
+For both models, increasing the training set size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a training set size of around 1500-2200.
 #### iii. Performance across sample sizes.
 To test the minimum amount of equally split sample data we need to optimize our model's performance, we plot the benchmarks across increasing sample sizes.
 Here's how our benchmarks changed with increasing sample size:
@@ -199,7 +199,7 @@ Here's how our benchmarks changed with increasing sample size:
 
 ![image](Figure/Learning_curve_sample_size_spanish.png)
 
-For both models, increasing the sample size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a sample size of around 1500.
+For both models, increasing the sample size only slightly improves the performance. Additionally, we see performance across all benchmarks plateau at a sample size of around 2000.
 
 ### 2.4 Model limitations
 * While these models still perform well, they don't perform as well as the TF-IDF-based model. This implies that converting sentences into dense semantic embeddings doesn't have a lot of value.
