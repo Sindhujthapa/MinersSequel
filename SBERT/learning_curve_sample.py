@@ -54,8 +54,8 @@ def plot_learning_curve(X, y, model_name, steps=10):
     plt.show()
 
 datasets = [
-    ("steam_reviews_unique.csv", "Multilingual MiniLM (English)"),
-    ("steam_reviews_balanced_esp.csv", "Multilingual MiniLM (Spanish - Balanced)")
+    ("Scraper and data/steam_reviews_unique.csv", "Multilingual MiniLM (English)"),
+    ("Scraper and data/steam_reviews_balanced_esp.csv", "Multilingual MiniLM (Spanish - Balanced)")
 ]
 
 model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
