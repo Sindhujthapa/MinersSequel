@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 import warnings
 warnings.filterwarnings("ignore")
 
-# --- Function to plot learning curve ---
+
 def plot_random_stratified_learning_curve(X, y, model_name, steps=10, fixed_test_size=500):
     sizes = []
     aucs = []
@@ -18,7 +18,6 @@ def plot_random_stratified_learning_curve(X, y, model_name, steps=10, fixed_test
     total_samples = len(X)
     assert total_samples > fixed_test_size + 100, "Not enough data for learning curve."
 
-    # Step 1: stratified random split into test and pool
     X_pool, X_test, y_pool, y_test = train_test_split(
         X, y, test_size=fixed_test_size, stratify=y, random_state=42
     )
@@ -56,7 +55,6 @@ def plot_random_stratified_learning_curve(X, y, model_name, steps=10, fixed_test
         aps.append(ap)
         accs.append(acc)
 
-    # --- Plotting ---
     plt.figure(figsize=(10, 6))
     plt.plot(sizes, aucs, label="AUC")
     plt.plot(sizes, aps, label="Average Precision")
@@ -69,12 +67,10 @@ def plot_random_stratified_learning_curve(X, y, model_name, steps=10, fixed_test
     plt.grid(True)
     plt.tight_layout()
 
-    # Save and show plot
     safe_name = model_name.replace(" ", "_").replace("(", "").replace(")", "").replace("-", "")
     plt.savefig(f"{safe_name}_stratified_learning_curve.png")
     plt.show(block=True)
 
-# --- Load Data ---
 datasets = [
     ("steam_reviews_unique.csv", "Multilingual MiniLM (English)"),
     ("steam_reviews_balanced_esp.csv", "Multilingual MiniLM (Spanish Balanced)")
@@ -82,7 +78,6 @@ datasets = [
 
 model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 
-# --- Run for each dataset ---
 for filename, label in datasets:
     print(f"\nLoading dataset: {filename}")
     df = pd.read_csv(filename, encoding="utf-8-sig")
