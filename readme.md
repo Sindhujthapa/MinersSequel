@@ -93,7 +93,7 @@ Evaluation Results
 Best Performing: Logistic Regression and SVC
 Underperforming: Decision Tree and VADER
 
-⚠Model Limitations
+Model Limitations
 
 Random Forest: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
 Decision Tree: Overfits if not pruned; not ideal for linear TF-IDF features.
