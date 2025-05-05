@@ -86,10 +86,10 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 * Each model was assessed using AUC, precision, and recall.
 
 ### 1.3 Main Findings
-* **ROC curves**:
-* ![image](Figure/ROC.png)
-* **Learning curves**:
-* ![image](Figure/lc.png)
+
+![image](Figure/ROC.png)
+
+![image](Figure/lc.png)
 
 | Model                          | Precision | Recall |
 |-------------------------------|-----------|--------|
@@ -102,11 +102,21 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 
 
 * **Best Performing**: Logistic Regression and SVC
-* ![image](Figure/best.png)
+![image](Figure/best.png)
 * **Underperforming**: Decision Tree and VADER
-* ![image](Figure/worst.png)
+![image](Figure/worst.png)
 
-### 1.4 Model limitations
+### 1.4 Robustness checks
+| Model                          | Precision | Recall | AUC |
+|-------------------------------|-----------|--------|--------|
+| Logistic Regression           | 0.78      | 0.83   | 0.82 |
+| Naive Bayes                   | 0.81      | 0.89   | 0.79 |
+| Random Forest                 | 0.73      | 0.75   | 0.79 |
+| Decision Tree                 | 0.59      | 0.62   | 0.58 |
+| Support Vector Classification (SVC) | 0.81      | 0.87   | 0.82|
+| VADER                         | 0.79      | 0.86   | 0.78 |
+After checking for the accuracy in the original dataset called steam_reviews_unique.csv we tested all the models in IMDB dataset where precision, recall and accuracy seems to be slightly declined. However, the ranking was preserved as logistic regression & SVC preformed the best and VADAR & Decision tree performed the worst. 
+### 1.5 Model limitations
 
 * **Decision Tree & Random Fores**t: As tree-based algorithms, both models are prone to overfitting, particularly on noisy or high-dimensional data such as TF-IDF features.
 * **Logistic Regression**: Works well for simple patterns, but can miss sarcasm or complex sentiment that doesn’t follow a straight line.
@@ -114,7 +124,7 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 * **SVC**: Takes longer to train and uses more memory—especially when dealing with lots of reviews.
 * **VADER**: Rule-based and cannot learn from context or domain-specific language (e.g., gaming slang or sarcasm). Struggles with negation, and sarcasm, and lacks context awareness.
 
-### 1.5 Extensions
+### 1.6 Extensions
 
 * Instead of relying on TF-IDF, we could use modern language models (like BERT) that understand the context of words (capture sarcasm, tone, and subtle meaning in reviews).
 * Rather than just labeling reviews as positive or negative, we could expand the analysis to identify emotions like joy, anger, or frustration for deeper insights.
@@ -147,15 +157,6 @@ The next plot shows the ROC curve:
 
 ![image](Figure/ROC_curve.jpeg)
 
-### 2.4 Robustness checks
-| Model                          | Precision | Recall | AUC |
-|-------------------------------|-----------|--------|--------|
-| Logistic Regression           | 0.78      | 0.83   | 0.82 |
-| Naive Bayes                   | 0.81      | 0.89   | 0.79 |
-| Random Forest                 | 0.73      | 0.75   | 0.79 |
-| Decision Tree                 | 0.59      | 0.62   | 0.58 |
-| Support Vector Classification (SVC) | 0.81      | 0.87   | 0.82|
-| VADER                         | 0.79      | 0.86   | 0.78 |
 #### i. Performance across other data (movie reviews)
 We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
 | Evaluation Setting                      | AUC    | Average Precision | Best Logistic Regression Params                     |
