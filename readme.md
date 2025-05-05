@@ -115,6 +115,7 @@ Each model was assessed using AUC, precision, and recall.
 | Decision Tree                 | 0.59      | 0.62   | 0.58 |
 | Support Vector Classification (SVC) | 0.81      | 0.87   | 0.82|
 | VADER                         | 0.79      | 0.86   | 0.78 |
+
 After checking for the accuracy in the original dataset called steam_reviews_unique.csv we tested all the models in IMDB dataset where precision, recall and accuracy seems to be slightly declined. However, the ranking was preserved as logistic regression & SVC preformed the best and VADAR & Decision tree performed the worst. 
 ### 1.5 Model limitations
 
