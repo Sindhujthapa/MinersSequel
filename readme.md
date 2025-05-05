@@ -101,7 +101,7 @@ After running both types of models, we noticed the following performance across 
 
 The next plot shows the ROC curve:
 
-[image](ROC_curve.jpeg)
+![image](ROC_curve.jpeg)
 
 ### 2.4 Robustness checks
 #### i. Performance across other data (movie reviews)
