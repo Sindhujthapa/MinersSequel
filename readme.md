@@ -149,7 +149,7 @@ The next plot shows the ROC curve:
 | Random Forest                 | 0.73      | 0.75   | 0.79 |
 | Decision Tree                 | 0.59      | 0.62   | 0.58 |
 | Support Vector Classification (SVC) | 0.81      | 0.87   | 0.82|
-| VADER                         | 0.79      | 0.86   | |
+| VADER                         | 0.79      | 0.86   | 0.78 |
 #### i. Performance across other data (movie reviews)
 We downloaded a dataset from Hugging Face that lists movie reviews with sentiments from IMDb. We trained the model using the English data from the Steam reviews and tested it on the IMDb dataset. We noticed the following performance across the benchmarks:
 | Evaluation Setting                      | AUC    | Average Precision | Best Logistic Regression Params                     |
