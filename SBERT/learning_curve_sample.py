@@ -7,7 +7,6 @@ from sentence_transformers import SentenceTransformer
 import warnings
 warnings.filterwarnings("ignore")
 
-# Define the learning curve function
 def plot_learning_curve(X, y, model_name, steps=10):
     sizes = []
     aucs = []
@@ -41,7 +40,6 @@ def plot_learning_curve(X, y, model_name, steps=10):
         aps.append(ap)
         accs.append(acc)
 
-    # Plot
     plt.figure(figsize=(10, 6))
     plt.plot(sizes, aucs, label="AUC")
     plt.plot(sizes, aps, label="Average Precision")
@@ -55,16 +53,13 @@ def plot_learning_curve(X, y, model_name, steps=10):
     plt.tight_layout()
     plt.show()
 
-# List of datasets and labels
 datasets = [
     ("steam_reviews_unique.csv", "Multilingual MiniLM (English)"),
     ("steam_reviews_balanced_esp.csv", "Multilingual MiniLM (Spanish - Balanced)")
 ]
 
-# Load model once
 model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 
-# Loop over datasets
 for filename, label in datasets:
     print(f"\nLoading dataset: {filename}")
     df = pd.read_csv(filename, encoding="utf-8-sig")
