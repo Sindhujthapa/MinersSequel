@@ -111,9 +111,9 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 
 ### 1.5 Extensions
 
-* Deep Learning (e.g., BERT): Replace TF-IDF with contextual embeddings for sarcasm and nuance.
-* Emotion Classification: Go beyond binary sentiment to detect emotions (e.g., joy, anger).
-* Hybrid Models: Combine VADER with ML models by using its output as an input feature.
+* Instead of relying on TF-IDF, we could use modern language models (like BERT) that understand the context of words (capture sarcasm, tone, and subtle meaning in reviews).
+* Rather than just labeling reviews as positive or negative, we could expand the analysis to identify emotions like joy, anger, or frustration for deeper insights.
+* VADER's sentiment score could be added as a feature in machine learning models, blending human-coded rules with data-driven learning
 ## 2. Embedding 
 
 ### 2.1 Benchmarks
