@@ -102,12 +102,11 @@ We used TF-IDF vectorization to convert text reviews into numerical features sui
 
 ### 1.4 Model limitations
 
-* **Random Forest**: Can overfit noisy text, slow with high-dimensional TF-IDF, hard to interpret.
-* **Decision Tree**: Overfits if not pruned; not ideal for linear TF-IDF features.
-* **Logistic Regression**: Struggles with sarcasm and complex sentiment not linearly separable.
-* **Naive Bayes**: Assumes word independence; misses co-occurrences like “not good.”
-* **SVC**: High accuracy, but slow and memory-intensive with large datasets.
-* **VADER**: Lexicon-based, weak on negation, sarcasm, and domain-specific terms. Captures tone, not true satisfaction.
+* **Decision Tree & Random Fores**t: As tree-based algorithms, both models are prone to overfitting, particularly on noisy or high-dimensional data such as TF-IDF features.
+* **Logistic Regression**: Works well for simple patterns, but can miss sarcasm or complex sentiment that doesn’t follow a straight line.
+* **Naive Bayes**: Assumes word independence so gets problems with phrases like “not good.”
+* **SVC**: Takes longer to train and uses more memory—especially when dealing with lots of reviews.
+* **VADER**: Rule-based and cannot learn from context or domain-specific language (e.g., gaming slang or sarcasm). Struggles with negation, and sarcasm, and lacks context awareness.
 
 ### 1.5 Extensions
 
